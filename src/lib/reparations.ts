@@ -49,7 +49,7 @@ export async function getDashboardStats() {
     .toISOString()
     .slice(0, 10);
 
-  const [{ count: todayCount }, { count: monthCount }, { count: threeMonthsCount }] =
+  const [{ count: todayCount }, { count: monthCount }, { count: threeMonthsCount }, { count: totalCount }] =
     await Promise.all([
       supabase
         .schema("app")
@@ -66,12 +66,17 @@ export async function getDashboardStats() {
         .from("reparations")
         .select("id", { count: "exact", head: true })
         .gte("date_reception_client", threeMonthsAgo),
+      supabase
+        .schema("app")
+        .from("reparations")
+        .select("id", { count: "exact", head: true }),
     ]);
 
   return {
     today: todayCount ?? 0,
     month: monthCount ?? 0,
     threeMonths: threeMonthsCount ?? 0,
+    total: totalCount ?? 0,
   };
 }
 

@@ -17,10 +17,10 @@ export function LogoutButton() {
     <button
       type="button"
       onClick={onLogout}
-      className="rounded-lg border border-amber-200 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-black transition hover:bg-amber-50 active:bg-amber-100"
+      className="rounded-xl border-2 border-amber-200 bg-white px-3 md:px-4 py-2 md:py-2.5 text-xs md:text-sm font-bold text-zinc-900 shadow-sm transition-all hover:bg-amber-50 hover:border-amber-300 hover:shadow-md active:scale-95"
     >
-      <span className="hidden sm:inline">Déconnexion</span>
-      <span className="sm:hidden">🚪</span>
+      <span className="hidden md:inline">Déconnexion</span>
+      <span className="md:hidden">🚪</span>
     </button>
   );
 }

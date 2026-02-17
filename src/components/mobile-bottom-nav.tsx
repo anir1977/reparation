@@ -74,8 +74,8 @@ export function MobileBottomNav({ role }: { role: string }) {
   const navItems = role === "admin" ? [...NAV_ITEMS, ...ADMIN_NAV_ITEMS] : NAV_ITEMS;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-amber-200 bg-white/95 backdrop-blur-md shadow-xl md:hidden pb-safe">
-      <div className="grid grid-cols-4 gap-1 px-2 py-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-amber-200/50 bg-white/98 backdrop-blur-xl shadow-2xl md:hidden pb-safe">
+      <div className="grid gap-1 px-1.5 py-2.5" style={{ gridTemplateColumns: `repeat(${navItems.length}, 1fr)` }}>
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
           const Icon = isActive ? item.iconSolid : item.icon;
@@ -84,15 +84,17 @@ export function MobileBottomNav({ role }: { role: string }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl px-2 py-2.5 transition-colors ${
+              className={`flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2.5 transition-all duration-300 ${
                 isActive
-                  ? "bg-amber-50 text-amber-700 border border-amber-200 shadow-sm"
-                  : "text-zinc-600 border border-transparent active:bg-amber-50"
+                  ? "bg-gradient-to-br from-amber-100 to-amber-50 text-amber-800 border-2 border-amber-300 shadow-sm scale-105"
+                  : "text-zinc-500 border-2 border-transparent active:bg-zinc-50 hover:text-zinc-700"
               }`}
             >
-              <Icon className={`h-5 w-5 flex-shrink-0 ${isActive ? 'scale-110' : ''}`} />
-              <span className={`text-[10px] font-medium truncate w-full text-center ${
-                isActive ? 'font-semibold' : ''
+              <Icon className={`h-5 w-5 flex-shrink-0 transition-transform ${
+                isActive ? 'scale-110' : 'scale-100'
+              }`} />
+              <span className={`text-[9px] font-bold truncate w-full text-center uppercase tracking-wide ${
+                isActive ? 'font-extrabold' : ''
               }`}>
                 {item.label}
               </span>

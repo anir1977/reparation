@@ -1,89 +1,120 @@
 import Link from "next/link";
 import { DashboardCards } from "@/components/dashboard-cards";
 import { getDashboardStats, getRecentReparations } from "@/lib/reparations";
+import { 
+  PlusCircleIcon, 
+  UserGroupIcon, 
+  CreditCardIcon, 
+  ClockIcon 
+} from "@heroicons/react/24/outline";
 
 export default async function DashboardPage() {
   const [stats, recent] = await Promise.all([getDashboardStats(), getRecentReparations()]);
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="text-xl sm:text-2xl font-semibold">Dashboard</h2>
-        <p className="text-xs sm:text-sm text-zinc-600">Vue globale des réparations</p>
+    <div className="space-y-5 md:space-y-8">
+      <div className="text-center md:text-left">
+        <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Tableau de bord</h2>
+        <p className="text-sm md:text-base text-zinc-600 mt-1">Vue d'ensemble de votre activité</p>
       </div>
 
-      <DashboardCards today={stats.today} month={stats.month} threeMonths={stats.threeMonths} />
+      <DashboardCards today={stats.today} month={stats.month} threeMonths={stats.threeMonths} total={stats.total} />
 
-      <section className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
-        <Link
-          href="/nouvelle-reparation"
-          className="rounded-xl sm:rounded-2xl border border-zinc-200 p-4 sm:p-5 text-sm font-medium transition hover:border-amber-300 active:bg-amber-50"
-        >
-          Créer une nouvelle réparation
-        </Link>
-        <Link
-          href="/reparations-en-cours"
-          className="rounded-xl sm:rounded-2xl border border-zinc-200 p-4 sm:p-5 text-sm font-medium transition hover:border-amber-300 active:bg-amber-50"
-        >
-          Voir les réparations en cours
-        </Link>
-        <Link
-          href="/reparations-pretes"
-          className="rounded-xl sm:rounded-2xl border border-zinc-200 p-4 sm:p-5 text-sm font-medium transition hover:border-amber-300 active:bg-amber-50"
-        >
-          Voir les réparations prêtes
-        </Link>
-      </section>
-
-      <section className="rounded-xl sm:rounded-2xl border border-amber-100 bg-white p-3 sm:p-5 shadow-lg">
-        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div>
-            <h3 className="text-base sm:text-lg font-semibold text-amber-900">Dernières réparations</h3>
-            <p className="text-xs sm:text-sm text-zinc-600">Aperçu rapide des dossiers récents</p>
-          </div>
+      <section>
+        <h3 className="text-lg md:text-xl font-bold text-zinc-900 mb-4">Actions rapides</h3>
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <Link
+            href="/nouvelle-reparation"
+            className="group rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-amber-300 flex flex-col items-center justify-center text-center gap-3"
+          >
+            <div className="rounded-full bg-amber-100 p-4 group-hover:bg-amber-200 transition-colors">
+              <PlusCircleIcon className="h-8 w-8 md:h-10 md:w-10 text-amber-700" />
+            </div>
+            <span className="text-sm md:text-base font-bold text-zinc-900">Nouvelle<br/>réparation</span>
+          </Link>
+          <Link
+            href="/reparations-en-cours"
+            className="group rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-blue-300 flex flex-col items-center justify-center text-center gap-3"
+          >
+            <div className="rounded-full bg-blue-100 p-4 group-hover:bg-blue-200 transition-colors">
+              <ClockIcon className="h-8 w-8 md:h-10 md:w-10 text-blue-700" />
+            </div>
+            <span className="text-sm md:text-base font-bold text-zinc-900">En cours</span>
+          </Link>
           <Link
             href="/historique"
-            className="text-sm font-semibold text-amber-700 hover:text-amber-900 self-start sm:self-auto"
+            className="group rounded-2xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-purple-300 flex flex-col items-center justify-center text-center gap-3"
+          >
+            <div className="rounded-full bg-purple-100 p-4 group-hover:bg-purple-200 transition-colors">
+              <UserGroupIcon className="h-8 w-8 md:h-10 md:w-10 text-purple-700" />
+            </div>
+            <span className="text-sm md:text-base font-bold text-zinc-900">Clients</span>
+          </Link>
+          <Link
+            href="/reparations-pretes"
+            className="group rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-emerald-300 flex flex-col items-center justify-center text-center gap-3"
+          >
+            <div className="rounded-full bg-emerald-100 p-4 group-hover:bg-emerald-200 transition-colors">
+              <CreditCardIcon className="h-8 w-8 md:h-10 md:w-10 text-emerald-700" />
+            </div>
+            <span className="text-sm md:text-base font-bold text-zinc-900">Paiement</span>
+          </Link>
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg md:text-xl font-bold text-zinc-900">Activité récente</h3>
+          <Link
+            href="/historique"
+            className="text-sm font-bold text-amber-700 hover:text-amber-900 transition-colors"
           >
             Voir tout →
           </Link>
         </div>
-        <div className="divide-y divide-amber-100">
-          {recent.length ? (
-            recent.map((item) => (
-              <div
+        
+        {recent.length ? (
+          <div className="space-y-3">
+            {recent.map((item) => (
+              <Link
                 key={item.id}
-                className="grid gap-2 sm:gap-3 py-3 sm:grid-cols-[1.6fr_1fr_auto] sm:items-center"
+                href={`/reparation/${item.id}`}
+                className="group block rounded-2xl border-2 border-zinc-100 bg-white p-4 md:p-5 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300"
               >
-                <div className="min-w-0">
-                  <p className="font-medium text-zinc-900 truncate">{item.client_nom}</p>
-                  <p className="text-xs text-zinc-500 truncate">{item.client_telephone ?? "—"}</p>
-                </div>
-                <div className="text-xs sm:text-sm text-zinc-600 tabular-nums sm:text-right">
-                  {new Date(item.date_reception_client).toLocaleDateString("fr-FR")}
-                </div>
-                <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                  {item.urgent ? (
-                    <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-red-700">
-                      Urgent
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-bold text-base md:text-lg text-zinc-900 truncate group-hover:text-amber-900 transition-colors">
+                      {item.client_nom}
+                    </h4>
+                    <p className="text-sm text-zinc-600 truncate mt-0.5">{item.client_telephone ?? "—"}</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1.5">
+                    {item.urgent && (
+                      <span className="rounded-full border-2 border-red-200 bg-red-50 px-2.5 py-1 text-[10px] font-bold text-red-700 uppercase tracking-wide">
+                        Urgent
+                      </span>
+                    )}
+                    <span className="rounded-full border-2 border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-bold text-amber-800 uppercase tracking-wide">
+                      {item.statut}
                     </span>
-                  ) : null}
-                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-amber-800">
-                    {item.statut}
-                  </span>
-                  <Link
-                    href={`/reparation/${item.id}`}
-                    className="rounded-full border border-zinc-200 bg-white px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-zinc-700 hover:border-zinc-300"
-                  >
-                    Fiche
-                  </Link>
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <p className="py-6 text-center text-xs sm:text-sm text-zinc-500">Aucune réparation récente.</p>
-          )}
-        </div>
+                <div className="text-xs md:text-sm text-zinc-500 font-medium">
+                  {new Date(item.date_reception_client).toLocaleDateString("fr-FR", { 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                  })}
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border-2 border-dashed border-zinc-200 bg-zinc-50 p-12 text-center">
+            <p className="text-zinc-500 font-medium">Aucune réparation récente</p>
+            <p className="text-sm text-zinc-400 mt-1">Créez votre première réparation</p>
+          </div>
+        )}
       </section>
     </div>
   );

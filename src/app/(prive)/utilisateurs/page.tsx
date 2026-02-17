@@ -49,10 +49,10 @@ export default async function UtilisateursPage() {
   }));
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="text-xl sm:text-2xl font-semibold">Utilisateurs</h2>
-        <p className="text-xs sm:text-sm text-zinc-600">Gestion des accès employés/admin</p>
+    <div className="space-y-5 md:space-y-8">
+      <div className="text-center md:text-left">
+        <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Utilisateurs</h2>
+        <p className="text-sm md:text-base text-zinc-600 mt-1">Gestion des accès employés et admin</p>
       </div>
 
       <AdminUserForm />

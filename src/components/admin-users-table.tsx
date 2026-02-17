@@ -55,18 +55,20 @@ function AdminUserEditableCard({
   );
 
   return (
-    <article className="rounded-xl border border-zinc-200 bg-gradient-to-br from-white to-zinc-50/30 p-4 shadow-sm">
-      <div className="mb-3 flex items-start gap-2">
-        <UserCircleIcon className="h-6 w-6 text-zinc-400 flex-shrink-0 mt-1" />
+    <article className="rounded-2xl border-2 border-zinc-100 bg-gradient-to-br from-white to-zinc-50 p-5 shadow-md hover:shadow-lg transition-shadow">
+      <div className="mb-4 flex items-start gap-3">
+        <div className="rounded-xl bg-zinc-100 p-2.5">
+          <UserCircleIcon className="h-6 w-6 text-zinc-600 flex-shrink-0" />
+        </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <EnvelopeIcon className="h-3.5 w-3.5 text-zinc-400" />
-            <p className="text-xs text-zinc-600 truncate">{item.email ?? "Email indisponible"}</p>
+          <div className="flex items-center gap-2 mb-2">
+            <EnvelopeIcon className="h-4 w-4 text-zinc-400" />
+            <p className="text-sm text-zinc-700 truncate font-semibold">{item.email ?? "Email indisponible"}</p>
           </div>
           <div className="flex items-center gap-2">
-            <CalendarIcon className="h-3.5 w-3.5 text-zinc-400" />
-            <p className="text-xs text-zinc-500">
-              Créé le {new Date(item.created_at).toLocaleDateString("fr-FR")}
+            <CalendarIcon className="h-4 w-4 text-zinc-400" />
+            <p className="text-xs text-zinc-500 font-medium">
+              Créé le {new Date(item.created_at).toLocaleDateString("fr-FR", { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>
         </div>
@@ -76,31 +78,31 @@ function AdminUserEditableCard({
         <input type="hidden" name="user_id" value={item.id} />
         
         <div>
-          <label className="block text-xs font-medium text-zinc-600 mb-1">Nom complet</label>
+          <label className="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wide">Nom complet</label>
           <input
             name="nom_complet"
             defaultValue={item.nom_complet ?? ""}
             required
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
+            className="w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium outline-none transition-all focus:border-amber-400 focus:shadow-md"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-zinc-600 mb-1">Nom d'utilisateur</label>
+          <label className="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wide">Nom d'utilisateur</label>
           <input
             name="username"
             defaultValue={item.username ?? ""}
             required
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
+            className="w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium outline-none transition-all focus:border-amber-400 focus:shadow-md"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-zinc-600 mb-1">Rôle</label>
+          <label className="block text-xs font-bold text-zinc-700 mb-1.5 uppercase tracking-wide">Rôle</label>
           <select
             name="role"
             defaultValue={item.role}
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
+            className="w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium outline-none transition-all focus:border-amber-400 focus:shadow-md"
             disabled={isSelf}
           >
             <option value="employe">Employé</option>
@@ -108,29 +110,33 @@ function AdminUserEditableCard({
           </select>
         </div>
 
-        {isSelf && <p className="text-xs text-amber-600 font-medium">⚠️ Votre compte</p>}
+        {isSelf && (
+          <div className="rounded-xl bg-amber-50 border-2 border-amber-200 px-3 py-2">
+            <p className="text-xs text-amber-700 font-bold">⚠️ Votre compte (modification désactivée)</p>
+          </div>
+        )}
 
         <div className="flex gap-2">
           <button
             type="submit"
             disabled={isUpdating || isSelf}
-            className="flex-1 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition active:bg-amber-100 disabled:opacity-60"
+            className="flex-1 rounded-xl border-2 border-amber-200 bg-amber-50 px-4 py-3 text-sm font-black text-amber-900 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md uppercase tracking-wide"
           >
-            {isUpdating ? "En cours..." : "Sauvegarder"}
+            {isUpdating ? "Sauvegarde..." : "Sauvegarder"}
           </button>
         </div>
 
         <MutationMessage state={updateState} />
       </form>
 
-      <form action={deleteAction} className="mt-3 pt-3 border-t border-zinc-200">
+      <form action={deleteAction} className="mt-4 pt-4 border-t-2 border-zinc-100">
         <input type="hidden" name="user_id" value={item.id} />
         <button
           type="submit"
           disabled={isDeleting || isSelf}
-          className="w-full rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 transition active:bg-red-100 disabled:opacity-60"
+          className="w-full rounded-xl border-2 border-red-200 bg-red-50 px-4 py-3 text-sm font-black text-red-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md uppercase tracking-wide"
         >
-          {isDeleting ? "Suppression..." : "Supprimer l'utilisateur"}
+          {isDeleting ? "Suppression..." : "Supprimer"}
         </button>
         <MutationMessage state={deleteState} />
       </form>
@@ -227,8 +233,8 @@ export function AdminUsersTable({
   currentUserId: string;
 }) {
   return (
-    <section className="rounded-2xl border border-zinc-200 bg-white p-3 sm:p-5 shadow-sm">
-      <h3 className="mb-4 text-base sm:text-lg font-semibold">Liste des utilisateurs</h3>
+    <section className="rounded-2xl border-2 border-zinc-100 bg-white p-4 md:p-6 shadow-lg">
+      <h3 className="mb-5 text-lg md:text-xl font-bold text-zinc-900">Liste des utilisateurs</h3>
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-3">
@@ -241,7 +247,10 @@ export function AdminUsersTable({
             />
           ))
         ) : (
-          <p className="text-center py-8 text-zinc-500 text-sm">Aucun utilisateur trouvé.</p>
+          <div className="rounded-2xl border-2 border-dashed border-zinc-200 bg-zinc-50 p-12 text-center">
+            <p className="text-zinc-500 font-bold text-base">Aucun utilisateur</p>
+            <p className="text-sm text-zinc-400 mt-1">Créez un nouvel utilisateur</p>
+          </div>
         )}
       </div>
 
@@ -249,11 +258,11 @@ export function AdminUsersTable({
       <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead>
-            <tr className="border-b border-zinc-200 text-left text-zinc-600">
-              <th className="px-2 py-2">Nom / Utilisateur / Email</th>
-              <th className="px-2 py-2">Rôle</th>
-              <th className="px-2 py-2">Créé le</th>
-              <th className="px-2 py-2">Suppression</th>
+            <tr className="border-b-2 border-zinc-200 text-left text-zinc-700 font-bold">
+              <th className="px-3 py-3">Nom / Utilisateur / Email</th>
+              <th className="px-3 py-3">Rôle</th>
+              <th className="px-3 py-3">Créé le</th>
+              <th className="px-3 py-3">Suppression</th>
             </tr>
           </thead>
           <tbody>
@@ -266,7 +275,7 @@ export function AdminUsersTable({
             ))}
             {!users.length ? (
               <tr>
-                <td colSpan={4} className="px-2 py-6 text-center text-zinc-500">
+                <td colSpan={4} className="px-3 py-8 text-center text-zinc-500">
                   Aucun utilisateur trouvé.
                 </td>
               </tr>

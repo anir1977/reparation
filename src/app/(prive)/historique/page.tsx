@@ -5,12 +5,12 @@ export default async function HistoriquePage() {
   const rows = await getHistoriqueReparations();
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="text-xl sm:text-2xl font-semibold">Historique</h2>
-        <p className="text-xs sm:text-sm text-zinc-600">Historique complet des réparations</p>
+    <div className="space-y-5 md:space-y-8">
+      <div className="text-center md:text-left">
+        <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Historique</h2>
+        <p className="text-sm md:text-base text-zinc-600 mt-1">Historique complet des réparations</p>
       </div>
-      <ReparationsTable rows={rows} title="Historique des réparations" />
+      <ReparationsTable rows={rows} title="Toutes les réparations" />
     </div>
   );
 }

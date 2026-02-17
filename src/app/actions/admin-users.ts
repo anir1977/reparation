@@ -74,7 +74,12 @@ export async function createUserByAdminAction(
     return { ok: false, message: adminContext.error };
   }
 
-  const adminClient = createAdminClient();
+  let adminClient;
+  try {
+    adminClient = createAdminClient();
+  } catch (error: any) {
+    return { ok: false, message: error?.message ?? "Configuration admin manquante." };
+  }
 
   const { data: created, error: createError } = await adminClient.auth.admin.createUser({
     email,
@@ -142,7 +147,12 @@ export async function updateUserByAdminAction(
     return { ok: false, message: "Le mot de passe doit contenir au moins 6 caractères." };
   }
 
-  const adminClient = createAdminClient();
+  let adminClient;
+  try {
+    adminClient = createAdminClient();
+  } catch (error: any) {
+    return { ok: false, message: error?.message ?? "Configuration admin manquante." };
+  }
 
   const { data: authUser, error: getUserError } = await adminClient.auth.admin.getUserById(
     targetUserId,
@@ -196,7 +206,12 @@ export async function deleteUserByAdminAction(
     return { ok: false, message: "Impossible de supprimer votre propre compte." };
   }
 
-  const adminClient = createAdminClient();
+  let adminClient;
+  try {
+    adminClient = createAdminClient();
+  } catch (error: any) {
+    return { ok: false, message: error?.message ?? "Configuration admin manquante." };
+  }
   const { error } = await adminClient.auth.admin.deleteUser(targetUserId);
 
   if (error) {
