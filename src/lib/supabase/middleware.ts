@@ -18,7 +18,14 @@ function isProtected(pathname: string) {
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
-  const { supabaseUrl, supabaseKey } = getSupabaseEnv();
+  let supabaseUrl = "";
+  let supabaseKey = "";
+
+  try {
+    ({ supabaseUrl, supabaseKey } = getSupabaseEnv());
+  } catch {
+    return response;
+  }
 
   const supabase = createServerClient(
     supabaseUrl,
