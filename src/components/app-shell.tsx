@@ -30,11 +30,11 @@ export function AppShell({
       <header className="sticky top-0 z-20 border-b-2 border-amber-200/50 bg-white/95 backdrop-blur-xl shadow-lg">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 md:px-6 lg:px-8 md:py-4">
           <div className="flex items-center gap-3 min-w-0">
-            <span className="inline-flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 shadow-md flex-shrink-0">
-              <span className="text-xl md:text-2xl font-black tracking-tight text-white drop-shadow-sm">
-                BD
-              </span>
-            </span>
+            <img 
+              src="/logo.jpg" 
+              alt="Ben Daoud Logo"
+              className="h-11 w-11 md:h-12 md:w-12 rounded-2xl object-cover shadow-md flex-shrink-0"
+            />
             <div className="min-w-0">
               <h1 className="text-base md:text-xl font-black tracking-tight text-zinc-900 truncate">
                 Ben Daoud <span className="text-amber-700 hidden md:inline">Réparation</span>
