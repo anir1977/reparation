@@ -22,37 +22,37 @@ export function AdminUserForm() {
   }, [state.ok]);
 
   return (
-    <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-      <h3 className="text-lg font-semibold">Créer un utilisateur</h3>
-      <p className="mt-1 text-sm text-zinc-600">Accès réservé aux administrateurs</p>
+    <section className="rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-3 sm:p-5 shadow-sm">
+      <h3 className="text-base sm:text-lg font-semibold">Créer un utilisateur</h3>
+      <p className="mt-1 text-xs sm:text-sm text-zinc-600">Accès réservé aux administrateurs</p>
 
-      <form ref={formRef} action={formAction} className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <form ref={formRef} action={formAction} className="mt-4 grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
         <div>
-          <label htmlFor="nom_complet" className="mb-1 block text-sm font-medium">
+          <label htmlFor="nom_complet" className="mb-1 block text-xs sm:text-sm font-medium">
             Nom complet
           </label>
           <input
             id="nom_complet"
             name="nom_complet"
             required
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
           />
         </div>
 
         <div>
-          <label htmlFor="username" className="mb-1 block text-sm font-medium">
+          <label htmlFor="username" className="mb-1 block text-xs sm:text-sm font-medium">
             Utilisateur
           </label>
           <input
             id="username"
             name="username"
             required
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium">
+          <label htmlFor="email" className="mb-1 block text-xs sm:text-sm font-medium">
             Email
           </label>
           <input
@@ -60,12 +60,12 @@ export function AdminUserForm() {
             name="email"
             type="email"
             required
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1 block text-sm font-medium">
+          <label htmlFor="password" className="mb-1 block text-xs sm:text-sm font-medium">
             Mot de passe
           </label>
           <input
@@ -74,19 +74,19 @@ export function AdminUserForm() {
             type="password"
             required
             minLength={6}
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
           />
         </div>
 
         <div>
-          <label htmlFor="role" className="mb-1 block text-sm font-medium">
+          <label htmlFor="role" className="mb-1 block text-xs sm:text-sm font-medium">
             Rôle
           </label>
           <select
             id="role"
             name="role"
             defaultValue="employe"
-            className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+            className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm outline-none transition focus:border-amber-400"
           >
             <option value="employe">Employé</option>
             <option value="admin">Admin</option>
@@ -96,7 +96,7 @@ export function AdminUserForm() {
         <div className="md:col-span-2">
           {state.message ? (
             <p
-              className={`rounded-lg px-3 py-2 text-sm ${
+              className={`rounded-lg px-3 py-2 text-xs sm:text-sm ${
                 state.ok
                   ? "border border-emerald-200 bg-emerald-50 text-emerald-700"
                   : "border border-red-200 bg-red-50 text-red-700"
@@ -111,7 +111,7 @@ export function AdminUserForm() {
           <button
             type="submit"
             disabled={isPending}
-            className="rounded-lg bg-black px-4 py-2 font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60"
+            className="w-full sm:w-auto rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60"
           >
             {isPending ? "Création..." : "Créer l'utilisateur"}
           </button>

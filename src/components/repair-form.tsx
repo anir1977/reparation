@@ -397,67 +397,68 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold">Informations client</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <form onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
+      <section className="rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-3 sm:p-5 shadow-sm">
+        <h2 className="mb-3 sm:mb-4 text-base sm:text-lg font-semibold">Informations client</h2>
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium">Nom complet *</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Nom complet *</label>
             <input
               value={clientNom}
               onChange={(event) => setClientNom(event.target.value)}
               required
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium">Téléphone</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Téléphone</label>
             <input
               value={telephone}
               onChange={(event) => setTelephone(event.target.value)}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              type="tel"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             />
           </div>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Bijoux</h2>
+      <section className="rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-3 sm:p-5 shadow-sm">
+        <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <h2 className="text-base sm:text-lg font-semibold">Bijoux</h2>
           <button
             type="button"
             onClick={addBijou}
-            className="rounded-lg border border-zinc-200 px-3 py-2 text-sm font-medium transition hover:border-amber-300"
+            className="w-full sm:w-auto rounded-lg border border-zinc-200 px-3 py-2 text-sm font-medium transition hover:border-amber-300 active:bg-amber-50"
           >
-            Ajouter un bijou
+            + Ajouter un bijou
           </button>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-3 sm:space-y-5">
           {bijoux.map((bijou, index) => (
-            <article key={index} className="rounded-xl border border-zinc-200 p-4">
+            <article key={index} className="rounded-lg sm:rounded-xl border border-zinc-200 p-3 sm:p-4 bg-gradient-to-br from-white to-zinc-50/30">
               <div className="mb-3 flex items-center justify-between">
-                <p className="font-medium">Bijou {index + 1}</p>
+                <p className="text-sm sm:text-base font-semibold text-amber-900">Bijou {index + 1}</p>
                 {bijoux.length > 1 ? (
                   <button
                     type="button"
                     onClick={() => removeBijou(index)}
-                    className="rounded-md border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50"
+                    className="rounded-md border border-red-200 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50 active:bg-red-100"
                   >
                     Retirer
                   </button>
                 ) : null}
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
                 <div>
-                  <label className="mb-1 block text-sm font-medium">Type de produit</label>
+                  <label className="mb-1 block text-xs sm:text-sm font-medium">Type de produit</label>
                   <select
                     value={bijou.type_produit}
                     onChange={(event) =>
                       updateBijou(index, { type_produit: event.target.value as TypeProduit })
                     }
-                    className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+                    className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
                   >
                     {TYPES_PRODUIT.map((typeProduit) => (
                       <option key={typeProduit} value={typeProduit}>
@@ -467,32 +468,33 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                   </select>
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium">Description</label>
+                  <label className="mb-1 block text-xs sm:text-sm font-medium">Description</label>
                   <input
                     value={bijou.description}
                     onChange={(event) => updateBijou(index, { description: event.target.value })}
-                    className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+                    className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
                     placeholder="Détail facultatif"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium">Prix (DH)</label>
+                  <label className="mb-1 block text-xs sm:text-sm font-medium">Prix (DH)</label>
                   <input
                     type="number"
                     min="0"
                     step="0.01"
+                    inputMode="decimal"
                     value={bijou.prix_reparation}
                     onChange={(event) => updateBijou(index, { prix_reparation: event.target.value })}
-                    className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+                    className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
                   />
                 </div>
               </div>
 
-              <div className="mt-4">
-                <label className="mb-1 block text-sm font-medium">Photos</label>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="mt-3 sm:mt-4">
+                <label className="mb-2 block text-xs sm:text-sm font-medium">Photos</label>
+                <div className="space-y-2">
                   <div>
-                    <p className="mb-1 text-xs font-medium text-zinc-500">Depuis la galerie</p>
+                    <p className="mb-1 text-xs font-medium text-zinc-500">📁 Depuis la galerie</p>
                     <input
                       type="file"
                       multiple
@@ -500,11 +502,11 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                       onChange={(event) =>
                         addPhotosToBijou(index, Array.from(event.target.files ?? []))
                       }
-                      className="block w-full text-sm"
+                      className="block w-full text-xs sm:text-sm file:mr-2 file:rounded-lg file:border-0 file:bg-amber-50 file:px-3 file:py-2 file:text-xs file:font-medium file:text-amber-700 hover:file:bg-amber-100"
                     />
                   </div>
-                  <div>
-                    <p className="mb-1 text-xs font-medium text-zinc-500">Prendre une photo</p>
+                  <div className="md:hidden">
+                    <p className="mb-1 text-xs font-medium text-zinc-500">📷 Prendre une photo</p>
                     <input
                       type="file"
                       multiple
@@ -513,19 +515,19 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                       onChange={(event) =>
                         addPhotosToBijou(index, Array.from(event.target.files ?? []))
                       }
-                      className="block w-full text-sm"
+                      className="block w-full text-xs file:mr-2 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:text-xs file:font-medium file:text-blue-700 hover:file:bg-blue-100"
                     />
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setCameraIndex(index)}
+                    className="hidden md:inline-flex w-full rounded-lg border border-zinc-200 px-3 py-2 text-xs font-medium text-zinc-700 transition hover:border-amber-300 justify-center items-center gap-2"
+                  >
+                    🎥 Ouvrir caméra (PC)
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setCameraIndex(index)}
-                  className="mt-3 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-medium text-zinc-700 transition hover:border-amber-300"
-                >
-                  Ouvrir camera (PC)
-                </button>
 
-                <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
                   {previewsByBijou[index]?.existing.map((url, photoIndex) => (
                     <Image
                       key={`existing-${photoIndex}`}
@@ -555,15 +557,15 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold">Détails réparation</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <section className="rounded-xl sm:rounded-2xl border border-zinc-200 bg-white p-3 sm:p-5 shadow-sm">
+        <h2 className="mb-3 sm:mb-4 text-base sm:text-lg font-semibold">Détails réparation</h2>
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
           <div>
-            <label className="mb-1 block text-sm font-medium">Atelier</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Atelier</label>
             <select
               value={atelier}
               onChange={(event) => setAtelier(event.target.value as (typeof ATELIERS)[number])}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             >
               {ATELIERS.map((item) => (
                 <option key={item} value={item}>
@@ -574,54 +576,55 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Date réception client *</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Date réception client *</label>
             <input
               type="date"
               required
               value={dateReception}
               onChange={(event) => setDateReception(event.target.value)}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Date retour atelier</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Date retour atelier</label>
             <input
               type="date"
               value={dateRetourAtelier}
               onChange={(event) => setDateRetourAtelier(event.target.value)}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Date livraison client</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Date livraison client</label>
             <input
               type="date"
               value={dateLivraison}
               onChange={(event) => setDateLivraison(event.target.value)}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Prix réparation (MAD)</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Prix réparation (MAD)</label>
             <input
               type="number"
               min="0"
               step="0.01"
+              inputMode="decimal"
               value={prix}
               onChange={(event) => setPrix(event.target.value)}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium">Statut</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Statut</label>
             <select
               value={statut}
               onChange={(event) => setStatut(event.target.value as StatutReparation)}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
             >
               {STATUTS.map((item) => (
                 <option key={item} value={item}>
@@ -630,65 +633,67 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
               ))}
             </select>
           </div>
-          <div className="flex items-center gap-3 pt-6">
+          <div className="flex items-center gap-2 sm:gap-3 pt-4 sm:pt-6 md:col-span-3">
             <input
               id="urgent"
               type="checkbox"
               checked={urgent}
               onChange={(event) => setUrgent(event.target.checked)}
-              className="h-4 w-4 rounded border-zinc-300 text-red-600 focus:ring-red-500"
+              className="h-4 w-4 sm:h-5 sm:w-5 rounded border-zinc-300 text-red-600 focus:ring-red-500"
             />
-            <label htmlFor="urgent" className="text-sm font-medium text-zinc-700">
-              Réparation urgente
+            <label htmlFor="urgent" className="text-xs sm:text-sm font-medium text-zinc-700">
+              🔥 Réparation urgente
             </label>
           </div>
         </div>
       </section>
 
       {errorMessage ? (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
           {errorMessage}
         </p>
       ) : null}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="rounded-lg bg-black px-5 py-2.5 font-medium text-white transition hover:bg-zinc-800 disabled:opacity-60"
-      >
-        {isSubmitting
-          ? "Enregistrement..."
-          : isEditMode
-            ? "Mettre à jour la réparation"
-            : "Enregistrer la réparation"}
-      </button>
+      <div className="sticky bottom-28 md:bottom-0 bg-gradient-to-t from-white via-white to-transparent pt-4 pb-2 -mx-3 sm:-mx-0 px-3 sm:px-0">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full rounded-lg bg-black px-5 py-3 sm:py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 active:scale-[0.98] disabled:opacity-60 shadow-lg"
+        >
+          {isSubmitting
+            ? "⏳ Enregistrement..."
+            : isEditMode
+              ? "✓ Mettre à jour la réparation"
+              : "✓ Enregistrer la réparation"}
+        </button>
+      </div>
       {cameraIndex !== null ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-xl rounded-2xl bg-white p-4 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 sm:p-4">
+          <div className="w-full max-w-xl rounded-xl sm:rounded-2xl bg-white p-3 sm:p-4 shadow-xl">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Camera</h3>
+              <h3 className="text-sm sm:text-base font-semibold">📷 Caméra</h3>
               <button
                 type="button"
                 onClick={() => setCameraIndex(null)}
-                className="rounded-md border border-zinc-200 px-2 py-1 text-xs font-medium"
+                className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium hover:bg-zinc-50 active:bg-zinc-100"
               >
-                Fermer
+                ✕ Fermer
               </button>
             </div>
             {cameraError ? (
-              <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+              <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
                 {cameraError}
               </p>
             ) : (
               <div className="space-y-3">
-                <video ref={videoRef} className="w-full rounded-lg bg-black" />
-                <div className="flex items-center justify-end gap-2">
+                <video ref={videoRef} className="w-full rounded-lg bg-black aspect-video" />
+                <div className="flex items-center justify-center gap-2">
                   <button
                     type="button"
                     onClick={capturePhoto}
-                    className="rounded-lg bg-black px-3 py-2 text-xs font-medium text-white"
+                    className="w-full sm:w-auto rounded-lg bg-black px-4 py-3 sm:py-2 text-sm font-medium text-white hover:bg-zinc-800 active:scale-95 transition"
                   >
-                    Prendre la photo
+                    📸 Prendre la photo
                   </button>
                 </div>
               </div>

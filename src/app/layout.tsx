@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   description: "Application interne de gestion des réparations de bijoux",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

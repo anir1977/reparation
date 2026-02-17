@@ -57,19 +57,19 @@ export function WhatsAppNotifyButton({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 sm:gap-3">
       <button
         type="button"
         onClick={onSend}
         disabled={isSending}
-        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+        className="rounded-lg bg-emerald-600 px-4 py-2.5 sm:py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-60 w-full sm:w-auto"
       >
-        {isSending ? "Envoi..." : "Envoyer WhatsApp"}
+        {isSending ? "⏳ Envoi..." : "📱 Envoyer WhatsApp"}
       </button>
       {error ? (
-        <span className="text-xs text-red-600">{error}</span>
+        <span className="text-xs sm:text-sm text-red-600 px-2">{error}</span>
       ) : success ? (
-        <span className="text-xs text-emerald-700">Message envoye.</span>
+        <span className="text-xs sm:text-sm text-emerald-700 px-2">✓ Message envoyé.</span>
       ) : null}
     </div>
   );

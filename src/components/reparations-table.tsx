@@ -28,7 +28,7 @@ function formatPrix(prix: number) {
   return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(prix);
 }
 
-import { EyeIcon, PencilSquareIcon, PrinterIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, PencilSquareIcon, PrinterIcon, TrashIcon, PhoneIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
 
 export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }) {
   const router = useRouter();
@@ -65,9 +65,9 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
   };
 
   return (
-    <section className="rounded-2xl border border-amber-100 bg-white p-5 shadow-lg">
+    <section className="rounded-2xl border border-amber-100 bg-white p-3 sm:p-5 shadow-lg">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl font-bold text-amber-900">{title}</h2>
+        <h2 className="text-lg sm:text-xl font-bold text-amber-900">{title}</h2>
         <div className="w-full sm:max-w-xs">
           <input
             value={query}
@@ -78,7 +78,108 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {filteredRows.length ? (
+          filteredRows.map((row) => (
+            <article
+              key={row.id}
+              className="rounded-xl border border-amber-100 bg-gradient-to-br from-white to-amber-50/30 p-4 shadow-sm"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold text-zinc-900 text-base truncate">{row.client_nom}</h3>
+                  {row.client_telephone && (
+                    <a 
+                      href={`tel:${row.client_telephone}`}
+                      className="flex items-center gap-1 text-sm text-amber-700 hover:text-amber-900 mt-1"
+                    >
+                      <PhoneIcon className="h-3.5 w-3.5" />
+                      {row.client_telephone}
+                    </a>
+                  )}
+                </div>
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  {row.urgent && (
+                    <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-700">
+                      URGENT
+                    </span>
+                  )}
+                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                    {row.statut}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3 text-xs">
+                <div className="flex items-center gap-1 text-zinc-600">
+                  <WrenchScrewdriverIcon className="h-3.5 w-3.5 text-amber-600" />
+                  <span className="font-medium">{row.atelier}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-zinc-500">Bijoux: </span>
+                  <span className="font-semibold text-zinc-900">{row.bijoux_count ?? 0}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 text-xs text-zinc-600 bg-amber-50/50 rounded-lg p-2">
+                <div>
+                  <div className="text-[10px] text-zinc-500 uppercase tracking-wide">Réception</div>
+                  <div className="font-medium">{formatDate(row.date_reception_client)}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-zinc-500 uppercase tracking-wide">Retour</div>
+                  <div className="font-medium">{formatDate(row.date_retour_atelier)}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-zinc-500 uppercase tracking-wide">Livraison</div>
+                  <div className="font-medium">{formatDate(row.date_livraison_client)}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mb-3 pb-3 border-b border-amber-100">
+                <span className="text-xs text-zinc-500">Prix de réparation</span>
+                <span className="font-bold text-amber-900 text-base">{formatPrix(row.prix_reparation)} DH</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href={`/reparation/${row.id}`}
+                  className="flex items-center justify-center gap-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 shadow-sm transition active:bg-zinc-50"
+                >
+                  <EyeIcon className="h-3.5 w-3.5" /> Fiche
+                </Link>
+                <Link
+                  href={`/reparation/${row.id}/recu`}
+                  className="flex items-center justify-center gap-1 rounded-lg border border-emerald-200 bg-white px-3 py-2 text-xs font-semibold text-emerald-700 shadow-sm transition active:bg-emerald-50"
+                >
+                  <PrinterIcon className="h-3.5 w-3.5" /> Reçu
+                </Link>
+                <Link
+                  href={`/nouvelle-reparation?edit=${row.id}`}
+                  className="flex items-center justify-center gap-1 rounded-lg border border-amber-200 bg-white px-3 py-2 text-xs font-semibold text-amber-800 shadow-sm transition active:bg-amber-50"
+                >
+                  <PencilSquareIcon className="h-3.5 w-3.5" /> Modifier
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(row.id)}
+                  disabled={deletingId === row.id}
+                  className="flex items-center justify-center gap-1 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-700 shadow-sm transition active:bg-red-50 disabled:opacity-60"
+                >
+                  <TrashIcon className="h-3.5 w-3.5" />
+                  {deletingId === row.id ? "..." : "Suppr."}
+                </button>
+              </div>
+            </article>
+          ))
+        ) : (
+          <p className="text-center py-8 text-zinc-500 text-sm">Aucune réparation trouvée.</p>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full text-sm rounded-xl overflow-hidden">
           <thead className="sticky top-0 z-10 bg-gradient-to-b from-amber-50 to-white border-b border-amber-100">
             <tr className="text-left text-amber-800 font-semibold">
