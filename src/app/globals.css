@@ -32,3 +32,33 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Règles d'impression */
+@media print {
+  /* Cacher header, navigation et footer lors de l'impression */
+  header, nav, footer, .no-print {
+    display: none !important;
+  }
+  
+  /* Éviter les sauts de page dans les éléments */
+  * {
+    page-break-inside: avoid;
+  }
+  
+  /* Style de base pour l'impression */
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  /* Marges pour l'impression */
+  @page {
+    margin: 15mm;
+  }
+  
+  /* Afficher les liens en noir */
+  a {
+    color: black !important;
+    text-decoration: none !important;
+  }
+}

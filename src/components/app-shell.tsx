@@ -27,7 +27,7 @@ export function AppShell({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-zinc-50 text-black pb-24 md:pb-8">
-      <header className="sticky top-0 z-20 border-b-2 border-amber-200/50 bg-white/95 backdrop-blur-xl shadow-lg">
+      <header className="no-print sticky top-0 z-20 border-b-2 border-amber-200/50 bg-white/95 backdrop-blur-xl shadow-lg">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 md:px-6 lg:px-8 md:py-4">
           <div className="flex items-center gap-3 min-w-0">
             <img 
@@ -70,7 +70,9 @@ export function AppShell({
       <main className="mx-auto w-full max-w-7xl px-4 py-5 md:px-6 lg:px-8 md:py-8">{children}</main>
       
       {/* Mobile Bottom Navigation */}
-      <MobileBottomNav role={role} />
+      <div className="no-print">
+        <MobileBottomNav role={role} />
+      </div>
     </div>
   );
 }

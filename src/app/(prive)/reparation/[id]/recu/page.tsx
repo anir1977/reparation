@@ -25,10 +25,16 @@ export default async function ReparationRecuPage({
       <PrintTrigger />
       <style>{`
         @media print {
-          .no-print { display: none; }
-          body { background: white; }
+          .no-print { display: none !important; }
+          body { background: white !important; }
+          header { display: none !important; }
+          nav { display: none !important; }
+          footer { display: none !important; }
           .recu-cards { display: none !important; }
           .recu-table { display: block !important; }
+          @page {
+            margin: 20mm;
+          }
         }
         @media screen {
           header { display: none !important; }
@@ -48,8 +54,6 @@ export default async function ReparationRecuPage({
         <h1 className="text-lg sm:text-xl font-bold">Reçu de dépôt</h1>
         <PrintButton />
       </div>
-
-      <div className="mb-2 text-center text-base sm:text-lg font-bold">Ben Daoud Bijouterie</div>
 
       <header className="mb-4 sm:mb-6 border-b border-zinc-200 pb-3 sm:pb-4">
         <h2 className="text-xl sm:text-2xl font-bold">Ben Daoud Bijouterie</h2>
