@@ -139,7 +139,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
 
               <div className="flex items-center justify-between mb-4 pb-3 border-b-2 border-amber-100">
                 <span className="text-xs text-zinc-600 font-bold uppercase tracking-wide">Prix</span>
-                <span className="font-black text-amber-900 text-lg">{formatPrix(row.prix_reparation)} DH</span>
+                <span className="font-black text-amber-900 text-lg">{formatPrix(row.prix_reparation)}</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
@@ -213,7 +213,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                 <td className="px-3 py-3">{formatDate(row.date_reception_client)}</td>
                 <td className="px-3 py-3">{formatDate(row.date_retour_atelier)}</td>
                 <td className="px-3 py-3">{formatDate(row.date_livraison_client)}</td>
-                <td className="px-3 py-3 font-semibold text-amber-900">{formatPrix(row.prix_reparation)} DH</td>
+                <td className="px-3 py-3 font-semibold text-amber-900">{formatPrix(row.prix_reparation)}</td>
                 <td className="px-3 py-3">
                   <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-bold text-amber-800 shadow-sm">
                     {row.statut}

@@ -91,7 +91,7 @@ export default async function ReparationRecuPage({
               <p className="mt-1 text-xs text-zinc-500">Description</p>
               <p className="text-sm text-zinc-800">{bijou.description || "—"}</p>
               <p className="mt-1 text-xs text-zinc-500">Prix</p>
-              <p className="text-sm font-bold text-amber-900">{formatPrix(bijou.prix_reparation)} DH</p>
+              <p className="text-sm font-bold text-amber-900">{formatPrix(bijou.prix_reparation)}</p>
             </div>
           ))}
         </div>
@@ -109,7 +109,7 @@ export default async function ReparationRecuPage({
                 <tr key={`${bijou.type_produit}-${index}`} className="border-t border-zinc-100">
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium">{bijou.type_produit}</td>
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm">{bijou.description || "—"}</td>
-                  <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-amber-900 text-right">{formatPrix(bijou.prix_reparation)} DH</td>
+                  <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-amber-900 text-right">{formatPrix(bijou.prix_reparation)}</td>
                 </tr>
               ))}
             </tbody>
@@ -121,7 +121,7 @@ export default async function ReparationRecuPage({
         <div className="flex items-center justify-between">
           <p className="text-base sm:text-lg font-semibold">Prix total</p>
           <p className="text-lg sm:text-2xl font-black text-amber-900">
-            {formatPrix(data.bijoux.reduce((sum, b) => sum + Number(b.prix_reparation || 0), 0))} DH
+            {formatPrix(data.bijoux.reduce((sum, b) => sum + Number(b.prix_reparation || 0), 0))}
           </p>
         </div>
       </section>

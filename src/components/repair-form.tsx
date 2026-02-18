@@ -504,7 +504,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs sm:text-sm font-medium">Prix (DH)</label>
+                  <label className="mb-1 block text-xs sm:text-sm font-medium">Prix</label>
                   <input
                     type="number"
                     min="0"
@@ -622,7 +622,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           </div>
 
           <div>
-            <label className="mb-1 block text-xs sm:text-sm font-medium">Prix réparation (DH)</label>
+            <label className="mb-1 block text-xs sm:text-sm font-medium">Prix réparation</label>
             <input
               type="number"
               min="0"

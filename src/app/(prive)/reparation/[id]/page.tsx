@@ -100,7 +100,7 @@ export default async function ReparationDetailPage({
                 </div>
                 <div className="text-right">
                   <p className="text-xs sm:text-sm text-zinc-500">Prix</p>
-                  <p className="text-sm sm:text-base font-bold text-amber-900">{formatPrix(bijou.prix_reparation)} DH</p>
+                  <p className="text-sm sm:text-base font-bold text-amber-900">{formatPrix(bijou.prix_reparation)}</p>
                 </div>
               </div>
               <div>

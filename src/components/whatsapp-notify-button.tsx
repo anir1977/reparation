@@ -30,7 +30,7 @@ export function WhatsAppNotifyButton({
 
     setIsSending(true);
     try {
-      const prixMessage = totalPrix > 0 ? `au prix de ${formatPrix(totalPrix)} DH` : "gratuit";
+      const prixMessage = totalPrix > 0 ? `au prix de ${formatPrix(totalPrix)}` : "gratuit";
       const message =
         `Bonjour ${clientNom},\n` +
         "Ben Daoud Bijouterie vous informe que votre article est pret. " +
