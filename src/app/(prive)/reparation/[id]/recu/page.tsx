@@ -8,6 +8,11 @@ function formatDate(dateValue: string | null) {
   return new Date(dateValue).toLocaleDateString("fr-FR");
 }
 
+function formatPrix(value: string | number) {
+  const numeric = Number(value || 0);
+  return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(numeric);
+}
+
 export default async function ReparationRecuPage({
   params,
 }: {
@@ -85,6 +90,8 @@ export default async function ReparationRecuPage({
               <p className="text-sm font-medium text-zinc-900">{bijou.type_produit}</p>
               <p className="mt-1 text-xs text-zinc-500">Description</p>
               <p className="text-sm text-zinc-800">{bijou.description || "—"}</p>
+              <p className="mt-1 text-xs text-zinc-500">Prix</p>
+              <p className="text-sm font-bold text-amber-900">{formatPrix(bijou.prix_reparation)} DH</p>
             </div>
           ))}
         </div>
@@ -94,6 +101,7 @@ export default async function ReparationRecuPage({
               <tr>
                 <th className="px-3 py-2">Article</th>
                 <th className="px-3 py-2">Description</th>
+                <th className="px-3 py-2 text-right">Prix</th>
               </tr>
             </thead>
             <tbody>
@@ -101,10 +109,20 @@ export default async function ReparationRecuPage({
                 <tr key={`${bijou.type_produit}-${index}`} className="border-t border-zinc-100">
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium">{bijou.type_produit}</td>
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm">{bijou.description || "—"}</td>
+                  <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-amber-900 text-right">{formatPrix(bijou.prix_reparation)} DH</td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="mb-4 sm:mb-6 border-t-2 border-zinc-300 pt-3 sm:pt-4">
+        <div className="flex items-center justify-between">
+          <p className="text-base sm:text-lg font-semibold">Prix total</p>
+          <p className="text-lg sm:text-2xl font-black text-amber-900">
+            {formatPrix(data.bijoux.reduce((sum, b) => sum + Number(b.prix_reparation || 0), 0))} DH
+          </p>
         </div>
       </section>
 
