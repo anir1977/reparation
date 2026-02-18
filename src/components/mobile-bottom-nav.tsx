@@ -7,6 +7,7 @@ import {
   PlusCircleIcon, 
   WrenchScrewdriverIcon, 
   CheckCircleIcon, 
+  TruckIcon,
   BookOpenIcon, 
   ChartBarIcon, 
   UsersIcon 
@@ -16,6 +17,7 @@ import {
   PlusCircleIcon as PlusCircleIconSolid,
   WrenchScrewdriverIcon as WrenchScrewdriverIconSolid,
   CheckCircleIcon as CheckCircleIconSolid,
+  TruckIcon as TruckIconSolid,
   BookOpenIcon as BookOpenIconSolid,
   ChartBarIcon as ChartBarIconSolid,
   UsersIcon as UsersIconSolid
@@ -45,6 +47,12 @@ const NAV_ITEMS = [
     label: "Prêtes", 
     icon: CheckCircleIcon,
     iconSolid: CheckCircleIconSolid
+  },
+  { 
+    href: "/historique-livraisons", 
+    label: "Livrées", 
+    icon: TruckIcon,
+    iconSolid: TruckIconSolid
   },
   { 
     href: "/statistiques", 

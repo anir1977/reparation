@@ -10,6 +10,7 @@ const PATHS_TO_REVALIDATE = [
   "/historique",
   "/statistiques",
   "/nouvelle-reparation",
+  "/reparation",
 ];
 
 export async function deleteReparationAction(formData: FormData) {
@@ -45,4 +46,30 @@ export async function deleteReparationAction(formData: FormData) {
   await supabase.schema("app").from("reparations").delete().eq("id", id);
 
   PATHS_TO_REVALIDATE.forEach((path) => revalidatePath(path));
+}
+
+export async function markAsDeliveredAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) {
+    return { success: false, error: "ID manquant" };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .schema("app")
+    .from("reparations")
+    .update({ 
+      statut: "livré",
+      date_livraison_client: new Date().toISOString().split('T')[0]
+    })
+    .eq("id", id);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  PATHS_TO_REVALIDATE.forEach((path) => revalidatePath(path));
+  
+  return { success: true };
 }

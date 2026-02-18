@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
-import { UserIcon, HomeIcon, PlusCircleIcon, WrenchScrewdriverIcon, CheckCircleIcon, BookOpenIcon, ChartBarIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { UserIcon, HomeIcon, PlusCircleIcon, WrenchScrewdriverIcon, CheckCircleIcon, BookOpenIcon, ChartBarIcon, UsersIcon, TruckIcon } from "@heroicons/react/24/outline";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: <HomeIcon className="h-5 w-5" /> },
   { href: "/nouvelle-reparation", label: "Nouvelle réparation", icon: <PlusCircleIcon className="h-5 w-5" /> },
   { href: "/reparations-en-cours", label: "En cours", icon: <WrenchScrewdriverIcon className="h-5 w-5" /> },
   { href: "/reparations-pretes", label: "Prêtes", icon: <CheckCircleIcon className="h-5 w-5" /> },
+  { href: "/historique-livraisons", label: "Livrées", icon: <TruckIcon className="h-5 w-5" /> },
   { href: "/historique", label: "Historique", icon: <BookOpenIcon className="h-5 w-5" /> },
   { href: "/statistiques", label: "Statistiques", icon: <ChartBarIcon className="h-5 w-5" /> },
 ];

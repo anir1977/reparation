@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { StatutReparation } from "@/lib/types";
+import { markAsDeliveredAction } from "@/app/actions/reparations";
 
 type Row = {
   id: string;
@@ -28,12 +29,26 @@ function formatPrix(prix: number) {
   return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(prix);
 }
 
-import { EyeIcon, PencilSquareIcon, PrinterIcon, TrashIcon, PhoneIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/outline";
+function getStatutBadgeClasses(statut: StatutReparation) {
+  switch (statut) {
+    case "en cours":
+      return "border-orange-300 bg-orange-100 text-orange-800";
+    case "prêt":
+      return "border-blue-300 bg-blue-100 text-blue-800";
+    case "livré":
+      return "border-green-400 bg-green-100 text-green-800";
+    default:
+      return "border-zinc-300 bg-zinc-100 text-zinc-800";
+  }
+}
+
+import { EyeIcon, PencilSquareIcon, PrinterIcon, TrashIcon, PhoneIcon, WrenchScrewdriverIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deliveringId, setDeliveringId] = useState<string | null>(null);
 
   const filteredRows = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -61,6 +76,21 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
       router.refresh();
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const handleMarkAsDelivered = async (id: string) => {
+    if (!confirm("Marquer cette réparation comme livrée ?")) {
+      return;
+    }
+    setDeliveringId(id);
+    try {
+      const formData = new FormData();
+      formData.append("id", id);
+      await markAsDeliveredAction(formData);
+      router.refresh();
+    } finally {
+      setDeliveringId(null);
     }
   };
 
@@ -105,7 +135,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                       Urgent
                     </span>
                   )}
-                  <span className="rounded-full border-2 border-amber-300 bg-amber-100 px-2.5 py-1 text-[10px] font-black text-amber-800 uppercase tracking-wide shadow-sm">
+                  <span className={`rounded-full border-2 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide shadow-sm ${getStatutBadgeClasses(row.statut)}`}>
                     {row.statut}
                   </span>
                 </div>
@@ -155,6 +185,17 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                 >
                   <PrinterIcon className="h-4 w-4" /> Reçu
                 </Link>
+                {row.statut === "prêt" && (
+                  <button
+                    type="button"
+                    onClick={() => handleMarkAsDelivered(row.id)}
+                    disabled={deliveringId === row.id}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-green-200 bg-green-50 px-3 py-2.5 text-xs font-bold text-green-700 shadow-sm transition-all active:scale-95 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CheckCircleIcon className="h-4 w-4" />
+                    {deliveringId === row.id ? "..." : "Livré"}
+                  </button>
+                )}
                 <Link
                   href={`/nouvelle-reparation?edit=${row.id}`}
                   className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-amber-200 bg-amber-50 px-3 py-2.5 text-xs font-bold text-amber-800 shadow-sm transition-all active:scale-95 hover:shadow-md"
@@ -215,7 +256,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                 <td className="px-3 py-3">{formatDate(row.date_livraison_client)}</td>
                 <td className="px-3 py-3 font-semibold text-amber-900">{formatPrix(row.prix_reparation)}</td>
                 <td className="px-3 py-3">
-                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-bold text-amber-800 shadow-sm">
+                  <span className={`rounded-full border px-2 py-1 text-xs font-bold shadow-sm ${getStatutBadgeClasses(row.statut)}`}>
                     {row.statut}
                   </span>
                 </td>
@@ -240,6 +281,18 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                     >
                       <PrinterIcon className="h-4 w-4" /> Recu
                     </Link>
+                    {row.statut === "prêt" && (
+                      <button
+                        type="button"
+                        onClick={() => handleMarkAsDelivered(row.id)}
+                        disabled={deliveringId === row.id}
+                        className="inline-flex items-center gap-1 rounded-full border border-green-300 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-800 shadow-sm transition hover:bg-green-100 hover:border-green-400 disabled:opacity-60"
+                        title="Marquer comme livré"
+                      >
+                        <CheckCircleIcon className="h-4 w-4" />
+                        {deliveringId === row.id ? "..." : "Livré"}
+                      </button>
+                    )}
                     <Link
                       href={`/nouvelle-reparation?edit=${row.id}`}
                       className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-white px-3 py-1.5 text-xs font-semibold text-amber-800 shadow-sm transition hover:bg-amber-50 hover:border-amber-400"
