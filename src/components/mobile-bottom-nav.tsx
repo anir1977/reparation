@@ -74,7 +74,7 @@ export function MobileBottomNav({ role }: { role: string }) {
   const navItems = role === "admin" ? [...NAV_ITEMS, ...ADMIN_NAV_ITEMS] : NAV_ITEMS;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t-2 border-amber-200/50 bg-white/98 backdrop-blur-xl shadow-2xl md:hidden pb-safe">
+    <nav className="no-print fixed bottom-0 left-0 right-0 z-50 border-t-2 border-amber-200/50 bg-white/98 backdrop-blur-xl shadow-2xl md:hidden pb-safe">
       <div className="grid gap-1 px-1.5 py-2.5" style={{ gridTemplateColumns: `repeat(${navItems.length}, 1fr)` }}>
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
