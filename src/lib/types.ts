@@ -51,6 +51,7 @@ export interface ReparationFormValues {
 }
 
 export interface ExistingBijouInput {
+  id: string;
   type_produit: TypeProduit;
   description: string;
   photos: string[];

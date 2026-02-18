@@ -231,6 +231,7 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     urgent: reparation.urgent ?? false,
     statut: reparation.statut,
     bijoux: (bijoux ?? []).map((item) => ({
+      id: item.id,
       type_produit: item.type_produit,
       description: item.description ?? "",
       prix_reparation: Number(item.prix_reparation ?? 0).toString(),

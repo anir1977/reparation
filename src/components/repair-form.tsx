@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ATELIERS, STATUTS, TYPES_PRODUIT } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/client";
 import type { ReparationEditPayload, StatutReparation, TypeProduit } from "@/lib/types";
+import { PhotoGallery } from "@/components/photo-gallery";
 
 type BijouInput = {
   type_produit: TypeProduit;
@@ -104,6 +105,32 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           ? { ...item, newPhotos: [...item.newPhotos, ...files] }
           : item,
       ),
+    );
+  };
+
+  const deletePhotoFromBijou = (bijouIndex: number, photoUrl: string) => {
+    setBijoux((current) =>
+      current.map((item, currentIndex) => {
+        if (currentIndex !== bijouIndex) return item;
+
+        // Si c'est une URL blob (nouvelle photo), on supprime du tableau newPhotos
+        if (photoUrl.startsWith("blob:")) {
+          const blobIndex = item.newPhotos.findIndex((file) => fileToPreview(file) === photoUrl);
+          if (blobIndex !== -1) {
+            URL.revokeObjectURL(photoUrl); // Libérer la mémoire
+            return {
+              ...item,
+              newPhotos: item.newPhotos.filter((_, idx) => idx !== blobIndex),
+            };
+          }
+        }
+
+        // Sinon c'est une photo existante, on la retire de existingPhotos
+        return {
+          ...item,
+          existingPhotos: item.existingPhotos.filter((url) => url !== photoUrl),
+        };
+      }),
     );
   };
 
@@ -527,30 +554,18 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                   </button>
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-                  {previewsByBijou[index]?.existing.map((url, photoIndex) => (
-                    <Image
-                      key={`existing-${photoIndex}`}
-                      src={url}
-                      alt="Photo existante"
-                      width={160}
-                      height={160}
-                      unoptimized
-                      className="h-20 w-full rounded-md border border-zinc-200 object-cover"
+                {(previewsByBijou[index]?.existing.length > 0 || previewsByBijou[index]?.newPreviews.length > 0) && (
+                  <div className="mt-3">
+                    <PhotoGallery
+                      photos={[
+                        ...previewsByBijou[index].existing,
+                        ...previewsByBijou[index].newPreviews,
+                      ]}
+                      editable={true}
+                      onDeletePhoto={(photoUrl) => deletePhotoFromBijou(index, photoUrl)}
                     />
-                  ))}
-                  {previewsByBijou[index]?.newPreviews.map((url, photoIndex) => (
-                    <Image
-                      key={`new-${photoIndex}`}
-                      src={url}
-                      alt="Aperçu"
-                      width={160}
-                      height={160}
-                      unoptimized
-                      className="h-20 w-full rounded-md border border-zinc-200 object-cover"
-                    />
-                  ))}
-                </div>
+                  </div>
+                )}
               </div>
             </article>
           ))}

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getReparationForEdit } from "@/lib/reparations";
 import { WhatsAppNotifyButton } from "@/components/whatsapp-notify-button";
+import { BijouPhotosDisplay } from "@/components/bijou-photos-display";
 
 function formatDate(dateValue: string | null) {
   if (!dateValue) return "—";
@@ -107,21 +107,11 @@ export default async function ReparationDetailPage({
                 <p className="text-xs sm:text-sm text-zinc-500 mb-1">Description</p>
                 <p className="text-sm sm:text-base font-medium text-zinc-900">{bijou.description || "—"}</p>
               </div>
-              {bijou.photos?.length ? (
-                <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-                  {bijou.photos.map((url, photoIndex) => (
-                    <Image
-                      key={`${index}-photo-${photoIndex}`}
-                      src={url}
-                      alt="Photo bijou"
-                      width={160}
-                      height={160}
-                      unoptimized
-                      className="h-20 w-full rounded-md border border-zinc-200 object-cover"
-                    />
-                  ))}
-                </div>
-              ) : null}
+              <BijouPhotosDisplay 
+                bijouId={bijou.id}
+                initialPhotos={bijou.photos || []}
+                editable={true}
+              />
             </div>
           ))}
         </div>
