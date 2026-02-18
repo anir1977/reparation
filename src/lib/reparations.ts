@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Reparation, ReparationEditPayload, StatutReparation } from "@/lib/types";
+import { unstable_cache } from "next/cache";
 
 async function getClientsMap(clientIds: string[]) {
   if (!clientIds.length) {

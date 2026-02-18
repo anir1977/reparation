@@ -92,6 +92,7 @@ export function MobileBottomNav({ role }: { role: string }) {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className={`flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2.5 transition-all duration-300 ${
                 isActive
                   ? "bg-gradient-to-br from-amber-100 to-amber-50 text-amber-800 border-2 border-amber-300 shadow-sm scale-105"

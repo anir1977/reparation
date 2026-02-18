@@ -59,6 +59,7 @@ export function AppShell({
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className="group flex items-center gap-2 rounded-full border-2 border-amber-100 bg-white/80 px-4 py-2 text-sm font-bold text-zinc-700 shadow-sm transition-all hover:border-amber-400 hover:bg-amber-50 hover:text-amber-900 hover:scale-105 whitespace-nowrap"
             >
               <span className="text-amber-500 group-hover:text-amber-700">{item.icon}</span>

@@ -175,12 +175,14 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
               <div className="grid grid-cols-2 gap-2">
                 <Link
                   href={`/reparation/${row.id}`}
+                  prefetch={true}
                   className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-zinc-200 bg-white px-3 py-2.5 text-xs font-bold text-zinc-700 shadow-sm transition-all active:scale-95 hover:shadow-md"
                 >
                   <EyeIcon className="h-4 w-4" /> Fiche
                 </Link>
                 <Link
                   href={`/reparation/${row.id}/recu`}
+                  prefetch={true}
                   className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-200 bg-emerald-50 px-3 py-2.5 text-xs font-bold text-emerald-700 shadow-sm transition-all active:scale-95 hover:shadow-md"
                 >
                   <PrinterIcon className="h-4 w-4" /> Reçu
@@ -198,6 +200,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                 )}
                 <Link
                   href={`/nouvelle-reparation?edit=${row.id}`}
+                  prefetch={false}
                   className="flex items-center justify-center gap-1.5 rounded-xl border-2 border-amber-200 bg-amber-50 px-3 py-2.5 text-xs font-bold text-amber-800 shadow-sm transition-all active:scale-95 hover:shadow-md"
                 >
                   <PencilSquareIcon className="h-4 w-4" /> Modifier
@@ -269,6 +272,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                     ) : null}
                     <Link
                       href={`/reparation/${row.id}`}
+                      prefetch={true}
                       className="inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-sm transition hover:bg-zinc-50 hover:border-zinc-300"
                       title="Voir la fiche"
                     >
@@ -276,6 +280,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                     </Link>
                     <Link
                       href={`/reparation/${row.id}/recu`}
+                      prefetch={true}
                       className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50 hover:border-emerald-300"
                       title="Imprimer le recu"
                     >
@@ -295,6 +300,7 @@ export function ReparationsTable({ rows, title }: { rows: Row[]; title: string }
                     )}
                     <Link
                       href={`/nouvelle-reparation?edit=${row.id}`}
+                      prefetch={false}
                       className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-white px-3 py-1.5 text-xs font-semibold text-amber-800 shadow-sm transition hover:bg-amber-50 hover:border-amber-400"
                       title="Modifier"
                     >

@@ -1,6 +1,7 @@
 import { CalendarDaysIcon, CalendarIcon, ChartBarIcon, RectangleStackIcon } from "@heroicons/react/24/outline";
+import { memo } from "react";
 
-export function DashboardCards({
+export const DashboardCards = memo(function DashboardCards({
   today,
   month,
   threeMonths,
@@ -56,4 +57,4 @@ export function DashboardCards({
       ))}
     </section>
   );
-}
+});
