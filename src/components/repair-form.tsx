@@ -78,6 +78,20 @@ function isMissingColumnError(
   return error.code === "PGRST204" && fullMessage.includes(columnName.toLowerCase());
 }
 
+function isInvalidTypeProduitEnumError(error: {
+  message?: string;
+  details?: string;
+  hint?: string;
+  code?: string;
+} | null) {
+  if (!error) {
+    return false;
+  }
+
+  const fullMessage = `${error.message ?? ""} ${error.details ?? ""} ${error.hint ?? ""}`.toLowerCase();
+  return fullMessage.includes("invalid input value for enum") && fullMessage.includes("type_produit");
+}
+
 export function RepairForm({ initialData }: { initialData: ReparationEditPayload | null }) {
   const router = useRouter();
   const isEditMode = Boolean(initialData);
@@ -475,6 +489,65 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           } else {
             createdBijou = fallbackWithoutGrammage.data;
             bijouError = fallbackWithoutGrammage.error;
+          }
+        }
+
+        if (isInvalidTypeProduitEnumError(bijouError)) {
+          const forcedCustomType = customTypeValue || bijou.type_produit;
+
+          const enumFallbackWithAllFields = await supabase
+            .schema("app")
+            .from("bijoux")
+            .insert({
+              reparation_id: reparationId,
+              type_produit: "autre",
+              type_produit_personnalise: forcedCustomType,
+              grammage_produit: grammageValue,
+              description: bijou.description.trim() || null,
+              prix_reparation: Number(bijou.prix_reparation || 0),
+            })
+            .select("id")
+            .single();
+
+          if (
+            isMissingColumnError(enumFallbackWithAllFields.error, "grammage_produit") ||
+            isMissingColumnError(enumFallbackWithAllFields.error, "type_produit_personnalise")
+          ) {
+            const enumFallbackWithoutGrammage = await supabase
+              .schema("app")
+              .from("bijoux")
+              .insert({
+                reparation_id: reparationId,
+                type_produit: "autre",
+                type_produit_personnalise: forcedCustomType,
+                description: bijou.description.trim() || null,
+                prix_reparation: Number(bijou.prix_reparation || 0),
+              })
+              .select("id")
+              .single();
+
+            if (isMissingColumnError(enumFallbackWithoutGrammage.error, "type_produit_personnalise")) {
+              const enumFallbackMinimal = await supabase
+                .schema("app")
+                .from("bijoux")
+                .insert({
+                  reparation_id: reparationId,
+                  type_produit: "autre",
+                  description: bijou.description.trim() || null,
+                  prix_reparation: Number(bijou.prix_reparation || 0),
+                })
+                .select("id")
+                .single();
+
+              createdBijou = enumFallbackMinimal.data;
+              bijouError = enumFallbackMinimal.error;
+            } else {
+              createdBijou = enumFallbackWithoutGrammage.data;
+              bijouError = enumFallbackWithoutGrammage.error;
+            }
+          } else {
+            createdBijou = enumFallbackWithAllFields.data;
+            bijouError = enumFallbackWithAllFields.error;
           }
         }
 
