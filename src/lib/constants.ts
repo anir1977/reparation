@@ -1,15 +1,14 @@
 export const ATELIERS = [
+  "Adil",
   "Brahim",
+  "Bouchaib",
+  "Hassan montre (kissariya)",
+  "Issam",
   "Miyara",
   "Oro",
-  "mecanica",
-  "Youssef",
-  "Issam",
-  "Adil",
-  "Bouchaib",
   "Rachid montre",
-  "Hassan montre (kissariya)",
   "Rahali",
+  "Youssef",
 ] as const;
 
 export const TYPES_PRODUIT = [
