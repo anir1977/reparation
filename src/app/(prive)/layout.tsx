@@ -19,19 +19,8 @@ export default async function ProtectedLayout({ children }: { children: React.Re
     .eq("id", user.id)
     .maybeSingle();
 
-  const { count: urgentCount } = await supabase
-    .schema("app")
-    .from("reparations")
-    .select("id", { count: "exact", head: true })
-    .eq("urgent", true)
-    .neq("statut", "livré");
-
   return (
-    <AppShell
-      role={profile?.role ?? "employe"}
-      userName={profile?.nom_complet ?? user.email ?? "Employé"}
-      urgentCount={urgentCount ?? 0}
-    >
+    <AppShell role={profile?.role ?? "employe"} userName={profile?.nom_complet ?? user.email ?? "Employé"}>
       {children}
     </AppShell>
   );
