@@ -56,37 +56,31 @@ async function getBijouxCountMap(reparationIds: string[]) {
 
 export async function getDashboardStats() {
   const supabase = await createClient();
-  const today = new Date();
-  const isoToday = today.toISOString().slice(0, 10);
-
-  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1)
-    .toISOString()
-    .slice(0, 10);
-
-  const threeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 2, 1)
-    .toISOString()
-    .slice(0, 10);
+  const now = new Date();
+  const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, 1);
 
   const [{ count: todayCount }, { count: monthCount }, { count: threeMonthsCount }, { count: totalCount }] =
     await Promise.all([
       supabase
         .schema("app")
-        .from("reparations")
+        .from("bijoux")
         .select("id", { count: "exact", head: true })
-        .eq("date_reception_client", isoToday),
+        .gte("created_at", dayStart.toISOString()),
       supabase
         .schema("app")
-        .from("reparations")
+        .from("bijoux")
         .select("id", { count: "exact", head: true })
-        .gte("date_reception_client", monthStart),
+        .gte("created_at", monthStart.toISOString()),
       supabase
         .schema("app")
-        .from("reparations")
+        .from("bijoux")
         .select("id", { count: "exact", head: true })
-        .gte("date_reception_client", threeMonthsAgo),
+        .gte("created_at", threeMonthsAgo.toISOString()),
       supabase
         .schema("app")
-        .from("reparations")
+        .from("bijoux")
         .select("id", { count: "exact", head: true }),
     ]);
 
