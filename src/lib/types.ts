@@ -20,6 +20,7 @@ export interface Bijou {
   id: string;
   reparation_id: string;
   type_produit: TypeProduit;
+  type_produit_personnalise?: string | null;
   description: string | null;
   prix_reparation: number;
   bijou_photos?: BijouPhoto[];
@@ -53,6 +54,7 @@ export interface ReparationFormValues {
 export interface ExistingBijouInput {
   id: string;
   type_produit: TypeProduit;
+  type_produit_personnalise?: string;
   description: string;
   photos: string[];
   prix_reparation: string;

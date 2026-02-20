@@ -96,7 +96,11 @@ export default async function ReparationDetailPage({
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div>
                   <p className="text-xs sm:text-sm text-zinc-500">Produit</p>
-                  <p className="text-sm sm:text-base font-semibold text-zinc-900">{bijou.type_produit}</p>
+                  <p className="text-sm sm:text-base font-semibold text-zinc-900">
+                    {bijou.type_produit === "autre" && bijou.type_produit_personnalise?.trim()
+                      ? bijou.type_produit_personnalise
+                      : bijou.type_produit}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs sm:text-sm text-zinc-500">Prix</p>

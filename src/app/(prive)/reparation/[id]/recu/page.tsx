@@ -87,7 +87,11 @@ export default async function ReparationRecuPage({
               className="rounded-lg border border-zinc-200 bg-white px-3 py-2"
             >
               <p className="text-xs text-zinc-500">Article</p>
-              <p className="text-sm font-medium text-zinc-900">{bijou.type_produit}</p>
+              <p className="text-sm font-medium text-zinc-900">
+                {bijou.type_produit === "autre" && bijou.type_produit_personnalise?.trim()
+                  ? bijou.type_produit_personnalise
+                  : bijou.type_produit}
+              </p>
               <p className="mt-1 text-xs text-zinc-500">Description</p>
               <p className="text-sm text-zinc-800">{bijou.description || "—"}</p>
               <p className="mt-1 text-xs text-zinc-500">Prix</p>
@@ -107,7 +111,11 @@ export default async function ReparationRecuPage({
             <tbody>
               {data.bijoux.map((bijou, index) => (
                 <tr key={`${bijou.type_produit}-${index}`} className="border-t border-zinc-100">
-                  <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium">{bijou.type_produit}</td>
+                  <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium">
+                    {bijou.type_produit === "autre" && bijou.type_produit_personnalise?.trim()
+                      ? bijou.type_produit_personnalise
+                      : bijou.type_produit}
+                  </td>
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm">{bijou.description || "—"}</td>
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-amber-900 text-right">{formatPrix(bijou.prix_reparation)}</td>
                 </tr>

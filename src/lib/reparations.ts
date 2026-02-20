@@ -196,7 +196,7 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     supabase
       .schema("app")
       .from("bijoux")
-      .select("id, type_produit, description, prix_reparation")
+      .select("id, type_produit, type_produit_personnalise, description, prix_reparation")
       .eq("reparation_id", reparation.id)
       .order("created_at", { ascending: true }),
   ]);
@@ -234,6 +234,7 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     bijoux: (bijoux ?? []).map((item) => ({
       id: item.id,
       type_produit: item.type_produit,
+      type_produit_personnalise: item.type_produit_personnalise ?? "",
       description: item.description ?? "",
       prix_reparation: Number(item.prix_reparation ?? 0).toString(),
       photos: photosByBijou.get(item.id) ?? [],
