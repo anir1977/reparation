@@ -6,12 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "backup:run": "bash scripts/backup-daily.sh",
+    "backup:install-cron": "bash scripts/install-backup-cron.sh"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.95.3",
+    "@vercel/analytics": "^1.6.1",
     "jspdf": "^4.1.0",
     "next": "16.1.6",
     "react": "19.2.3",
