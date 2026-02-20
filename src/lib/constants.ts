@@ -20,6 +20,11 @@ export const TYPES_PRODUIT = [
   "montre",
   "gourmette",
   "pendentif",
+  "mdaja",
+  "ensemble",
+  "parure",
+  "sautoir",
+  "broche",
   "autre",
 ] as const;
 

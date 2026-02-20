@@ -32,10 +32,21 @@ begin
       'montre',
       'gourmette',
       'pendentif',
+      'mdaja',
+      'ensemble',
+      'parure',
+      'sautoir',
+      'broche',
       'autre'
     );
   end if;
 end $$;
+
+alter type app.type_produit add value if not exists 'mdaja';
+alter type app.type_produit add value if not exists 'ensemble';
+alter type app.type_produit add value if not exists 'parure';
+alter type app.type_produit add value if not exists 'sautoir';
+alter type app.type_produit add value if not exists 'broche';
 
 do $$
 begin
