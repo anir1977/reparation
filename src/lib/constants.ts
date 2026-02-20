@@ -25,6 +25,7 @@ export const TYPES_PRODUIT = [
   "parure",
   "sautoir",
   "broche",
+  "mélange",
   "autre",
 ] as const;
 

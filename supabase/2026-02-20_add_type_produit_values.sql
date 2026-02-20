@@ -4,3 +4,4 @@ alter type app.type_produit add value if not exists 'ensemble';
 alter type app.type_produit add value if not exists 'parure';
 alter type app.type_produit add value if not exists 'sautoir';
 alter type app.type_produit add value if not exists 'broche';
+alter type app.type_produit add value if not exists 'mélange';
