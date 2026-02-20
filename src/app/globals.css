@@ -33,6 +33,22 @@ body {
   scrollbar-width: none;
 }
 
+@keyframes urgentFlash {
+  0%,
+  100% {
+    background-color: #dc2626;
+    opacity: 1;
+  }
+  50% {
+    background-color: #ef4444;
+    opacity: 0.55;
+  }
+}
+
+.urgent-flash {
+  animation: urgentFlash 0.9s steps(2, end) infinite;
+}
+
 /* Règles d'impression */
 @media print {
   /* Cacher header, navigation et footer lors de l'impression */

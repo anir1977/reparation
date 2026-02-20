@@ -18,16 +18,23 @@ const ADMIN_NAV_ITEMS = [{ href: "/utilisateurs", label: "Utilisateurs", icon: <
 export function AppShell({
   role,
   userName,
+  urgentCount,
   children,
 }: {
   role: string;
   userName: string;
+  urgentCount?: number;
   children: React.ReactNode;
 }) {
   const navItems = role === "admin" ? [...NAV_ITEMS, ...ADMIN_NAV_ITEMS] : NAV_ITEMS;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-zinc-50 text-black pb-24 md:pb-8">
+      {urgentCount ? (
+        <div className="no-print sticky top-0 z-30 bg-red-600 px-4 py-1.5 text-center text-xs font-bold text-white urgent-flash md:text-sm">
+          ⚠️ URGENT: {urgentCount} réparation{urgentCount > 1 ? "s" : ""} urgente{urgentCount > 1 ? "s" : ""} en attente
+        </div>
+      ) : null}
       <header className="no-print sticky top-0 z-20 border-b-2 border-amber-200/50 bg-white/95 backdrop-blur-xl shadow-lg">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 md:px-6 lg:px-8 md:py-4">
           <div className="flex items-center gap-3 min-w-0">
