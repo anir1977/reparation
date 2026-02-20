@@ -134,6 +134,7 @@ create table if not exists app.bijoux (
   reparation_id uuid not null references app.reparations(id) on delete cascade,
   type_produit app.type_produit not null,
   type_produit_personnalise text,
+  grammage_produit numeric(10,2),
   description text,
   prix_reparation numeric(10,2) not null default 0,
   created_at timestamptz not null default now(),
@@ -145,6 +146,9 @@ alter table if exists app.bijoux
 
 alter table if exists app.bijoux
   add column if not exists type_produit_personnalise text;
+
+alter table if exists app.bijoux
+  add column if not exists grammage_produit numeric(10,2);
 
 create table if not exists app.bijou_photos (
   id uuid primary key default gen_random_uuid(),

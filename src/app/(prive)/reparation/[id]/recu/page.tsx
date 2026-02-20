@@ -92,6 +92,10 @@ export default async function ReparationRecuPage({
                   ? bijou.type_produit_personnalise
                   : bijou.type_produit}
               </p>
+              <p className="mt-1 text-xs text-zinc-500">Gramage</p>
+              <p className="text-sm text-zinc-800">
+                {bijou.grammage_produit ? `${bijou.grammage_produit} g` : "—"}
+              </p>
               <p className="mt-1 text-xs text-zinc-500">Description</p>
               <p className="text-sm text-zinc-800">{bijou.description || "—"}</p>
               <p className="mt-1 text-xs text-zinc-500">Prix</p>
@@ -104,6 +108,7 @@ export default async function ReparationRecuPage({
             <thead className="bg-zinc-50 text-left">
               <tr>
                 <th className="px-3 py-2">Article</th>
+                <th className="px-3 py-2">Gramage</th>
                 <th className="px-3 py-2">Description</th>
                 <th className="px-3 py-2 text-right">Prix</th>
               </tr>
@@ -116,6 +121,7 @@ export default async function ReparationRecuPage({
                       ? bijou.type_produit_personnalise
                       : bijou.type_produit}
                   </td>
+                  <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm">{bijou.grammage_produit ? `${bijou.grammage_produit} g` : "—"}</td>
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm">{bijou.description || "—"}</td>
                   <td className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-amber-900 text-right">{formatPrix(bijou.prix_reparation)}</td>
                 </tr>

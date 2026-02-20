@@ -11,6 +11,7 @@ import { PhotoGallery } from "@/components/photo-gallery";
 type BijouInput = {
   type_produit: TypeProduit;
   type_produit_personnalise: string;
+  grammage_produit: string;
   description: string;
   prix_reparation: string;
   newPhotos: File[];
@@ -41,6 +42,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
       ? initialData.bijoux.map((b) => ({
           type_produit: b.type_produit,
           type_produit_personnalise: b.type_produit_personnalise ?? "",
+          grammage_produit: b.grammage_produit ?? "",
           description: b.description,
           prix_reparation: b.prix_reparation ?? "0",
           existingPhotos: b.photos,
@@ -50,6 +52,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           {
             type_produit: TYPES_PRODUIT[0],
             type_produit_personnalise: "",
+            grammage_produit: "",
             description: "",
             prix_reparation: "0",
             existingPhotos: [],
@@ -75,12 +78,18 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
     [bijoux],
   );
 
+  const sortedTypesProduit = useMemo(
+    () => [...TYPES_PRODUIT].sort((a, b) => a.localeCompare(b, "fr")),
+    [],
+  );
+
   const addBijou = () => {
     setBijoux((current) => [
       ...current,
       {
         type_produit: TYPES_PRODUIT[0],
         type_produit_personnalise: "",
+        grammage_produit: "",
         description: "",
         prix_reparation: "0",
         existingPhotos: [],
@@ -362,6 +371,9 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
             type_produit: bijou.type_produit,
             type_produit_personnalise:
               bijou.type_produit === "autre" ? bijou.type_produit_personnalise.trim() || null : null,
+            grammage_produit: bijou.grammage_produit.trim()
+              ? Number(bijou.grammage_produit)
+              : null,
             description: bijou.description.trim() || null,
             prix_reparation: Number(bijou.prix_reparation || 0),
           })
@@ -507,7 +519,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                     }}
                     className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
                   >
-                    {TYPES_PRODUIT.map((typeProduit) => (
+                    {sortedTypesProduit.map((typeProduit) => (
                       <option key={typeProduit} value={typeProduit}>
                         {typeProduit}
                       </option>
@@ -527,6 +539,19 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
                     />
                   </div>
                 ) : null}
+                <div>
+                  <label className="mb-1 block text-xs sm:text-sm font-medium">Gramage de produit (g)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    inputMode="decimal"
+                    value={bijou.grammage_produit}
+                    onChange={(event) => updateBijou(index, { grammage_produit: event.target.value })}
+                    className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none transition focus:border-amber-400"
+                    placeholder="Ex: 7.5"
+                  />
+                </div>
                 <div>
                   <label className="mb-1 block text-xs sm:text-sm font-medium">Description</label>
                   <input

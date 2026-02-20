@@ -108,6 +108,12 @@ export default async function ReparationDetailPage({
                 </div>
               </div>
               <div>
+                <p className="text-xs sm:text-sm text-zinc-500 mb-1">Gramage</p>
+                <p className="text-sm sm:text-base font-medium text-zinc-900">
+                  {bijou.grammage_produit ? `${bijou.grammage_produit} g` : "—"}
+                </p>
+              </div>
+              <div>
                 <p className="text-xs sm:text-sm text-zinc-500 mb-1">Description</p>
                 <p className="text-sm sm:text-base font-medium text-zinc-900">{bijou.description || "—"}</p>
               </div>
