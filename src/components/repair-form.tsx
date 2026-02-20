@@ -363,7 +363,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
       }
 
       for (const bijou of bijoux) {
-        const { data: createdBijou, error: bijouError } = await supabase
+        let { data: createdBijou, error: bijouError } = await supabase
           .schema("app")
           .from("bijoux")
           .insert({
@@ -379,6 +379,25 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           })
           .select("id")
           .single();
+
+        if (bijouError?.message?.includes("grammage_produit")) {
+          const fallbackInsert = await supabase
+            .schema("app")
+            .from("bijoux")
+            .insert({
+              reparation_id: reparationId,
+              type_produit: bijou.type_produit,
+              type_produit_personnalise:
+                bijou.type_produit === "autre" ? bijou.type_produit_personnalise.trim() || null : null,
+              description: bijou.description.trim() || null,
+              prix_reparation: Number(bijou.prix_reparation || 0),
+            })
+            .select("id")
+            .single();
+
+          createdBijou = fallbackInsert.data;
+          bijouError = fallbackInsert.error;
+        }
 
         if (bijouError || !createdBijou) {
           setErrorMessage(bijouError?.message ?? "Erreur création bijou.");

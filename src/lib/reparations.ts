@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Reparation, ReparationEditPayload, StatutReparation } from "@/lib/types";
+import type { Reparation, ReparationEditPayload, StatutReparation, TypeProduit } from "@/lib/types";
 import { unstable_cache } from "next/cache";
 
 async function getClientsMap(clientIds: string[]) {
@@ -186,20 +186,45 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     return null;
   }
 
-  const [{ data: client }, { data: bijoux }] = await Promise.all([
-    supabase
-      .schema("app")
-      .from("clients")
-      .select("id, nom_complet, telephone")
-      .eq("id", reparation.client_id)
-      .maybeSingle(),
-    supabase
+  const { data: client } = await supabase
+    .schema("app")
+    .from("clients")
+    .select("id, nom_complet, telephone")
+    .eq("id", reparation.client_id)
+    .maybeSingle();
+
+  type BijouRow = {
+    id: string;
+    type_produit: string;
+    type_produit_personnalise: string | null;
+    grammage_produit: number | null;
+    description: string | null;
+    prix_reparation: number;
+  };
+
+  let bijoux: BijouRow[] = [];
+  const bijouxWithGrammage = await supabase
+    .schema("app")
+    .from("bijoux")
+    .select("id, type_produit, type_produit_personnalise, grammage_produit, description, prix_reparation")
+    .eq("reparation_id", reparation.id)
+    .order("created_at", { ascending: true });
+
+  if (bijouxWithGrammage.error?.message?.includes("grammage_produit")) {
+    const legacyBijoux = await supabase
       .schema("app")
       .from("bijoux")
-      .select("id, type_produit, type_produit_personnalise, grammage_produit, description, prix_reparation")
+      .select("id, type_produit, type_produit_personnalise, description, prix_reparation")
       .eq("reparation_id", reparation.id)
-      .order("created_at", { ascending: true }),
-  ]);
+      .order("created_at", { ascending: true });
+
+    bijoux = (legacyBijoux.data ?? []).map((item) => ({
+      ...item,
+      grammage_produit: null,
+    })) as BijouRow[];
+  } else {
+    bijoux = (bijouxWithGrammage.data ?? []) as BijouRow[];
+  }
 
   const bijouIds = (bijoux ?? []).map((item) => item.id);
   const { data: photos } = bijouIds.length
@@ -233,7 +258,7 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     statut: reparation.statut,
     bijoux: (bijoux ?? []).map((item) => ({
       id: item.id,
-      type_produit: item.type_produit,
+      type_produit: item.type_produit as TypeProduit,
       type_produit_personnalise: item.type_produit_personnalise ?? "",
       grammage_produit:
         item.grammage_produit === null || item.grammage_produit === undefined
