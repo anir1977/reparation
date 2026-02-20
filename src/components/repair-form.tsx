@@ -24,18 +24,21 @@ function fileToPreview(file: File) {
   return URL.createObjectURL(file);
 }
 
-function isMissingGrammageColumnError(error: {
+function isMissingColumnError(
+  error: {
   message?: string;
   details?: string;
   hint?: string;
   code?: string;
-} | null) {
+} | null,
+  columnName: string,
+) {
   if (!error) {
     return false;
   }
 
   const fullMessage = `${error.message ?? ""} ${error.details ?? ""} ${error.hint ?? ""}`.toLowerCase();
-  return error.code === "PGRST204" || fullMessage.includes("grammage_produit");
+  return error.code === "PGRST204" && fullMessage.includes(columnName.toLowerCase());
 }
 
 export function RepairForm({ initialData }: { initialData: ReparationEditPayload | null }) {
@@ -377,40 +380,62 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
       }
 
       for (const bijou of bijoux) {
+        const customTypeValue =
+          bijou.type_produit === "autre" ? bijou.type_produit_personnalise.trim() || null : null;
+        const grammageValue = bijou.grammage_produit.trim()
+          ? Number(bijou.grammage_produit)
+          : null;
+
         let { data: createdBijou, error: bijouError } = await supabase
           .schema("app")
           .from("bijoux")
           .insert({
             reparation_id: reparationId,
             type_produit: bijou.type_produit,
-            type_produit_personnalise:
-              bijou.type_produit === "autre" ? bijou.type_produit_personnalise.trim() || null : null,
-            grammage_produit: bijou.grammage_produit.trim()
-              ? Number(bijou.grammage_produit)
-              : null,
+            type_produit_personnalise: customTypeValue,
+            grammage_produit: grammageValue,
             description: bijou.description.trim() || null,
             prix_reparation: Number(bijou.prix_reparation || 0),
           })
           .select("id")
           .single();
 
-        if (isMissingGrammageColumnError(bijouError)) {
-          const fallbackInsert = await supabase
+        if (
+          isMissingColumnError(bijouError, "grammage_produit") ||
+          isMissingColumnError(bijouError, "type_produit_personnalise")
+        ) {
+          const fallbackWithoutGrammage = await supabase
             .schema("app")
             .from("bijoux")
             .insert({
               reparation_id: reparationId,
               type_produit: bijou.type_produit,
-              type_produit_personnalise:
-                bijou.type_produit === "autre" ? bijou.type_produit_personnalise.trim() || null : null,
+              type_produit_personnalise: customTypeValue,
               description: bijou.description.trim() || null,
               prix_reparation: Number(bijou.prix_reparation || 0),
             })
             .select("id")
             .single();
 
-          createdBijou = fallbackInsert.data;
-          bijouError = fallbackInsert.error;
+          if (isMissingColumnError(fallbackWithoutGrammage.error, "type_produit_personnalise")) {
+            const fallbackMinimal = await supabase
+              .schema("app")
+              .from("bijoux")
+              .insert({
+                reparation_id: reparationId,
+                type_produit: bijou.type_produit,
+                description: bijou.description.trim() || null,
+                prix_reparation: Number(bijou.prix_reparation || 0),
+              })
+              .select("id")
+              .single();
+
+            createdBijou = fallbackMinimal.data;
+            bijouError = fallbackMinimal.error;
+          } else {
+            createdBijou = fallbackWithoutGrammage.data;
+            bijouError = fallbackWithoutGrammage.error;
+          }
         }
 
         if (bijouError || !createdBijou) {

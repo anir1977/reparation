@@ -2,18 +2,21 @@ import { createClient } from "@/lib/supabase/server";
 import type { Reparation, ReparationEditPayload, StatutReparation, TypeProduit } from "@/lib/types";
 import { unstable_cache } from "next/cache";
 
-function isMissingGrammageColumnError(error: {
+function isMissingColumnError(
+  error: {
   message?: string;
   details?: string;
   hint?: string;
   code?: string;
-} | null) {
+} | null,
+  columnName: string,
+) {
   if (!error) {
     return false;
   }
 
   const fullMessage = `${error.message ?? ""} ${error.details ?? ""} ${error.hint ?? ""}`.toLowerCase();
-  return error.code === "PGRST204" || fullMessage.includes("grammage_produit");
+  return error.code === "PGRST204" && fullMessage.includes(columnName.toLowerCase());
 }
 
 async function getClientsMap(clientIds: string[]) {
@@ -224,18 +227,33 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     .eq("reparation_id", reparation.id)
     .order("created_at", { ascending: true });
 
-  if (isMissingGrammageColumnError(bijouxWithGrammage.error)) {
-    const legacyBijoux = await supabase
+  if (bijouxWithGrammage.error) {
+    const withoutGrammage = await supabase
       .schema("app")
       .from("bijoux")
       .select("id, type_produit, type_produit_personnalise, description, prix_reparation")
       .eq("reparation_id", reparation.id)
       .order("created_at", { ascending: true });
 
-    bijoux = (legacyBijoux.data ?? []).map((item) => ({
-      ...item,
-      grammage_produit: null,
-    })) as BijouRow[];
+    if (withoutGrammage.error) {
+      const minimalBijoux = await supabase
+        .schema("app")
+        .from("bijoux")
+        .select("id, type_produit, description, prix_reparation")
+        .eq("reparation_id", reparation.id)
+        .order("created_at", { ascending: true });
+
+      bijoux = (minimalBijoux.data ?? []).map((item) => ({
+        ...item,
+        type_produit_personnalise: null,
+        grammage_produit: null,
+      })) as BijouRow[];
+    } else {
+      bijoux = (withoutGrammage.data ?? []).map((item) => ({
+        ...item,
+        grammage_produit: null,
+      })) as BijouRow[];
+    }
   } else {
     bijoux = (bijouxWithGrammage.data ?? []) as BijouRow[];
   }
