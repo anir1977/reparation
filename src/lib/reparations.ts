@@ -2,6 +2,20 @@ import { createClient } from "@/lib/supabase/server";
 import type { Reparation, ReparationEditPayload, StatutReparation, TypeProduit } from "@/lib/types";
 import { unstable_cache } from "next/cache";
 
+function isMissingGrammageColumnError(error: {
+  message?: string;
+  details?: string;
+  hint?: string;
+  code?: string;
+} | null) {
+  if (!error) {
+    return false;
+  }
+
+  const fullMessage = `${error.message ?? ""} ${error.details ?? ""} ${error.hint ?? ""}`.toLowerCase();
+  return error.code === "PGRST204" || fullMessage.includes("grammage_produit");
+}
+
 async function getClientsMap(clientIds: string[]) {
   if (!clientIds.length) {
     return new Map<string, { id: string; nom_complet: string; telephone: string | null }>();
@@ -210,7 +224,7 @@ export async function getReparationForEdit(id: string): Promise<ReparationEditPa
     .eq("reparation_id", reparation.id)
     .order("created_at", { ascending: true });
 
-  if (bijouxWithGrammage.error?.message?.includes("grammage_produit")) {
+  if (isMissingGrammageColumnError(bijouxWithGrammage.error)) {
     const legacyBijoux = await supabase
       .schema("app")
       .from("bijoux")

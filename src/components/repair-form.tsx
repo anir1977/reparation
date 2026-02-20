@@ -24,6 +24,20 @@ function fileToPreview(file: File) {
   return URL.createObjectURL(file);
 }
 
+function isMissingGrammageColumnError(error: {
+  message?: string;
+  details?: string;
+  hint?: string;
+  code?: string;
+} | null) {
+  if (!error) {
+    return false;
+  }
+
+  const fullMessage = `${error.message ?? ""} ${error.details ?? ""} ${error.hint ?? ""}`.toLowerCase();
+  return error.code === "PGRST204" || fullMessage.includes("grammage_produit");
+}
+
 export function RepairForm({ initialData }: { initialData: ReparationEditPayload | null }) {
   const router = useRouter();
   const isEditMode = Boolean(initialData);
@@ -380,7 +394,7 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           .select("id")
           .single();
 
-        if (bijouError?.message?.includes("grammage_produit")) {
+        if (isMissingGrammageColumnError(bijouError)) {
           const fallbackInsert = await supabase
             .schema("app")
             .from("bijoux")
