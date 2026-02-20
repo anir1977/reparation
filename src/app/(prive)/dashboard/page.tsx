@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { DashboardCards } from "@/components/dashboard-cards";
-import { getDashboardStats, getRecentReparations } from "@/lib/reparations";
+import { getDashboardStats, getReparationsByStatut } from "@/lib/reparations";
 import { 
   PlusCircleIcon, 
   UserGroupIcon, 
@@ -9,7 +9,12 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default async function DashboardPage() {
-  const [stats, recent] = await Promise.all([getDashboardStats(), getRecentReparations()]);
+  const [stats, deliveredRows] = await Promise.all([
+    getDashboardStats(),
+    getReparationsByStatut("livré"),
+  ]);
+
+  const delivered = deliveredRows.slice(0, 8);
 
   return (
     <div className="space-y-5 md:space-y-8">
@@ -64,18 +69,18 @@ export default async function DashboardPage() {
 
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg md:text-xl font-bold text-zinc-900">Activité récente</h3>
+          <h3 className="text-lg md:text-xl font-bold text-zinc-900">Historique clients livrés</h3>
           <Link
-            href="/historique"
+            href="/historique-livraisons"
             className="text-sm font-bold text-amber-700 hover:text-amber-900 transition-colors"
           >
             Voir tout →
           </Link>
         </div>
         
-        {recent.length ? (
+        {delivered.length ? (
           <div className="space-y-3">
-            {recent.map((item) => (
+            {delivered.map((item) => (
               <Link
                 key={item.id}
                 href={`/reparation/${item.id}`}
@@ -89,18 +94,13 @@ export default async function DashboardPage() {
                     <p className="text-sm text-zinc-600 truncate mt-0.5">{item.client_telephone ?? "—"}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1.5">
-                    {item.urgent && (
-                      <span className="rounded-full border-2 border-red-200 bg-red-50 px-2.5 py-1 text-[10px] font-bold text-red-700 uppercase tracking-wide">
-                        Urgent
-                      </span>
-                    )}
-                    <span className="rounded-full border-2 border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-bold text-amber-800 uppercase tracking-wide">
-                      {item.statut}
+                    <span className="rounded-full border-2 border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-800 uppercase tracking-wide">
+                      Livré
                     </span>
                   </div>
                 </div>
                 <div className="text-xs md:text-sm text-zinc-500 font-medium">
-                  {new Date(item.date_reception_client).toLocaleDateString("fr-FR", { 
+                  {new Date(item.date_livraison_client || item.date_reception_client).toLocaleDateString("fr-FR", { 
                     day: 'numeric', 
                     month: 'long', 
                     year: 'numeric' 
@@ -111,8 +111,8 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="rounded-2xl border-2 border-dashed border-zinc-200 bg-zinc-50 p-12 text-center">
-            <p className="text-zinc-500 font-medium">Aucune réparation récente</p>
-            <p className="text-sm text-zinc-400 mt-1">Créez votre première réparation</p>
+            <p className="text-zinc-500 font-medium">Aucun client livré pour le moment</p>
+            <p className="text-sm text-zinc-400 mt-1">Les livraisons apparaîtront ici automatiquement</p>
           </div>
         )}
       </section>
