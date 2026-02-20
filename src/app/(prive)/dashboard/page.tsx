@@ -18,56 +18,60 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-5 md:space-y-8">
-      <div className="text-center md:text-left">
+      <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-4 shadow-sm md:px-6 md:py-5">
         <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Tableau de bord</h2>
-        <p className="text-sm md:text-base text-zinc-600 mt-1">Vue d'ensemble de votre activité</p>
+        <p className="mt-1 text-sm md:text-base text-zinc-600">Vue d'ensemble de votre activité</p>
       </div>
 
       <DashboardCards today={stats.today} month={stats.month} threeMonths={stats.threeMonths} total={stats.total} />
 
-      <section>
-        <h3 className="text-lg md:text-xl font-bold text-zinc-900 mb-4">Actions rapides</h3>
+      <section className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm md:p-5">
+        <h3 className="mb-4 text-lg md:text-xl font-bold text-zinc-900">Actions rapides</h3>
         <div className="grid grid-cols-2 gap-3 md:gap-4">
           <Link
             href="/nouvelle-reparation"
-            className="group rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-amber-300 flex flex-col items-center justify-center text-center gap-3"
+            className="group rounded-2xl border border-amber-200 bg-linear-to-br from-amber-50 to-white p-5 md:p-6 shadow-sm transition hover:shadow-md"
           >
-            <div className="rounded-full bg-amber-100 p-4 group-hover:bg-amber-200 transition-colors">
+            <div className="mb-3 inline-flex rounded-full bg-amber-100 p-3">
               <PlusCircleIcon className="h-8 w-8 md:h-10 md:w-10 text-amber-700" />
             </div>
-            <span className="text-sm md:text-base font-bold text-zinc-900">Nouvelle<br/>réparation</span>
+            <p className="text-sm md:text-base font-bold text-zinc-900">Nouvelle réparation</p>
+            <p className="mt-1 text-xs text-zinc-500">Créer un nouveau dossier client</p>
           </Link>
           <Link
             href="/reparations-en-cours"
-            className="group rounded-2xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-blue-300 flex flex-col items-center justify-center text-center gap-3"
+            className="group rounded-2xl border border-blue-200 bg-linear-to-br from-blue-50 to-white p-5 md:p-6 shadow-sm transition hover:shadow-md"
           >
-            <div className="rounded-full bg-blue-100 p-4 group-hover:bg-blue-200 transition-colors">
+            <div className="mb-3 inline-flex rounded-full bg-blue-100 p-3">
               <ClockIcon className="h-8 w-8 md:h-10 md:w-10 text-blue-700" />
             </div>
-            <span className="text-sm md:text-base font-bold text-zinc-900">En cours</span>
+            <p className="text-sm md:text-base font-bold text-zinc-900">Réparations en cours</p>
+            <p className="mt-1 text-xs text-zinc-500">Suivre les dossiers actifs</p>
           </Link>
           <Link
             href="/historique"
-            className="group rounded-2xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-purple-300 flex flex-col items-center justify-center text-center gap-3"
+            className="group rounded-2xl border border-purple-200 bg-linear-to-br from-purple-50 to-white p-5 md:p-6 shadow-sm transition hover:shadow-md"
           >
-            <div className="rounded-full bg-purple-100 p-4 group-hover:bg-purple-200 transition-colors">
+            <div className="mb-3 inline-flex rounded-full bg-purple-100 p-3">
               <UserGroupIcon className="h-8 w-8 md:h-10 md:w-10 text-purple-700" />
             </div>
-            <span className="text-sm md:text-base font-bold text-zinc-900">Clients</span>
+            <p className="text-sm md:text-base font-bold text-zinc-900">Historique clients</p>
+            <p className="mt-1 text-xs text-zinc-500">Consulter les anciens dossiers</p>
           </Link>
           <Link
             href="/reparations-pretes"
-            className="group rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-emerald-300 flex flex-col items-center justify-center text-center gap-3"
+            className="group rounded-2xl border border-emerald-200 bg-linear-to-br from-emerald-50 to-white p-5 md:p-6 shadow-sm transition hover:shadow-md"
           >
-            <div className="rounded-full bg-emerald-100 p-4 group-hover:bg-emerald-200 transition-colors">
+            <div className="mb-3 inline-flex rounded-full bg-emerald-100 p-3">
               <CreditCardIcon className="h-8 w-8 md:h-10 md:w-10 text-emerald-700" />
             </div>
-            <span className="text-sm md:text-base font-bold text-zinc-900">Paiement</span>
+            <p className="text-sm md:text-base font-bold text-zinc-900">Prêtes à livrer</p>
+            <p className="mt-1 text-xs text-zinc-500">Dossiers finalisés en attente client</p>
           </Link>
         </div>
       </section>
 
-      <section>
+      <section className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm md:p-5">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg md:text-xl font-bold text-zinc-900">Historique clients livrés</h3>
           <Link
