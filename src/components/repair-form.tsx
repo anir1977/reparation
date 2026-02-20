@@ -19,9 +19,46 @@ type BijouInput = {
 };
 
 const DEFAULT_STATUS: StatutReparation = "en cours";
+const MAX_IMAGE_DIMENSION = 1600;
+const IMAGE_COMPRESSION_QUALITY = 0.8;
+const MAX_SIZE_WITHOUT_COMPRESSION = 1_500_000;
 
 function fileToPreview(file: File) {
   return URL.createObjectURL(file);
+}
+
+async function optimizePhotoForUpload(file: File): Promise<File> {
+  if (!file.type.startsWith("image/") || file.size <= MAX_SIZE_WITHOUT_COMPRESSION) {
+    return file;
+  }
+
+  const bitmap = await createImageBitmap(file);
+  const ratio = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(bitmap.width, bitmap.height));
+  const targetWidth = Math.max(1, Math.round(bitmap.width * ratio));
+  const targetHeight = Math.max(1, Math.round(bitmap.height * ratio));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    return file;
+  }
+
+  ctx.drawImage(bitmap, 0, 0, targetWidth, targetHeight);
+  bitmap.close();
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", IMAGE_COMPRESSION_QUALITY),
+  );
+
+  if (!blob) {
+    return file;
+  }
+
+  const nextName = file.name.replace(/\.[^.]+$/, "") || `photo-${Date.now()}`;
+  return new File([blob], `${nextName}.jpg`, { type: "image/jpeg" });
 }
 
 function isMissingColumnError(
@@ -215,15 +252,18 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
     }
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    canvas.width = video.videoWidth || 1280;
-    canvas.height = video.videoHeight || 720;
+    const sourceWidth = video.videoWidth || 1280;
+    const sourceHeight = video.videoHeight || 720;
+    const ratio = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(sourceWidth, sourceHeight));
+    canvas.width = Math.max(1, Math.round(sourceWidth * ratio));
+    canvas.height = Math.max(1, Math.round(sourceHeight * ratio));
     const ctx = canvas.getContext("2d");
     if (!ctx) {
       return;
     }
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, "image/jpeg", 0.9),
+      canvas.toBlob(resolve, "image/jpeg", IMAGE_COMPRESSION_QUALITY),
     );
     if (!blob) {
       return;
@@ -443,31 +483,40 @@ export function RepairForm({ initialData }: { initialData: ReparationEditPayload
           return;
         }
 
-        for (const photo of bijou.newPhotos) {
-          const extension = photo.name.split(".").pop() ?? "jpg";
-          const path = `${reparationId}/${createdBijou.id}/${crypto.randomUUID()}.${extension}`;
+        try {
+          await Promise.all(
+            bijou.newPhotos.map(async (photo) => {
+              const optimizedPhoto = await optimizePhotoForUpload(photo);
+              const extension = optimizedPhoto.name.split(".").pop() ?? "jpg";
+              const path = `${reparationId}/${createdBijou.id}/${crypto.randomUUID()}.${extension}`;
 
-          const { error: uploadError } = await supabase.storage
-            .from("bijoux-photos")
-            .upload(path, photo, { upsert: false, contentType: photo.type });
+              const { error: uploadError } = await supabase.storage
+                .from("bijoux-photos")
+                .upload(path, optimizedPhoto, {
+                  upsert: false,
+                  contentType: optimizedPhoto.type,
+                });
 
-          if (uploadError) {
-            setErrorMessage(uploadError.message);
-            return;
-          }
+              if (uploadError) {
+                throw new Error(uploadError.message);
+              }
 
-          const { data: publicUrlData } = supabase.storage.from("bijoux-photos").getPublicUrl(path);
+              const { data: publicUrlData } = supabase.storage.from("bijoux-photos").getPublicUrl(path);
 
-          const { error: photoDbError } = await supabase.schema("app").from("bijou_photos").insert({
-            bijou_id: createdBijou.id,
-            storage_path: path,
-            public_url: publicUrlData.publicUrl,
-          });
+              const { error: photoDbError } = await supabase.schema("app").from("bijou_photos").insert({
+                bijou_id: createdBijou.id,
+                storage_path: path,
+                public_url: publicUrlData.publicUrl,
+              });
 
-          if (photoDbError) {
-            setErrorMessage(photoDbError.message);
-            return;
-          }
+              if (photoDbError) {
+                throw new Error(photoDbError.message);
+              }
+            }),
+          );
+        } catch (error) {
+          setErrorMessage(error instanceof Error ? error.message : "Erreur upload photos.");
+          return;
         }
       }
 
