@@ -26,6 +26,7 @@ export const TYPES_PRODUIT = [
   "sautoir",
   "broche",
   "mélange",
+  "sertla",
   "autre",
 ] as const;
 

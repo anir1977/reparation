@@ -38,6 +38,7 @@ begin
       'sautoir',
       'broche',
       'mélange',
+      'sertla',
       'autre'
     );
   end if;
@@ -49,6 +50,7 @@ alter type app.type_produit add value if not exists 'parure';
 alter type app.type_produit add value if not exists 'sautoir';
 alter type app.type_produit add value if not exists 'broche';
 alter type app.type_produit add value if not exists 'mélange';
+alter type app.type_produit add value if not exists 'sertla';
 
 do $$
 begin
